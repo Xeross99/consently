@@ -46,7 +46,10 @@ jobs:
           ruby-version: ${{ matrix.ruby }}
           bundler-cache: true
 
-      - run: bin/rails db:test:prepare test
+      # Two steps on purpose: `bin/rails db:test:prepare test` makes Rails read
+      # the second word as a rake task, which does not exist in an engine.
+      - run: bin/rails db:test:prepare
+      - run: bin/rails test
 
   system:
     runs-on: ubuntu-latest
@@ -67,7 +70,8 @@ jobs:
         with:
           chrome-version: stable
 
-      - run: bin/rails db:test:prepare test:system
+      - run: bin/rails db:test:prepare
+      - run: bin/rails test:system
 
       - name: Keep screenshots from failed system tests
         uses: actions/upload-artifact@v4
