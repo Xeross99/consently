@@ -233,10 +233,10 @@ next request after that.
 ## Try it
 
 ```bash
-bin/rails server -p 3011
+bin/rails server
 ```
 
-http://localhost:3011 runs the dummy application: four tags configured, a live
+http://localhost:3000 runs the dummy application: four tags configured, a live
 list of what is blocked and what is running, the cookie as it stands, the
 logged decisions and every translation to click through.
 
