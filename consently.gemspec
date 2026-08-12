@@ -5,7 +5,7 @@ Gem::Specification.new do |spec|
   spec.version     = Consently::VERSION
   spec.authors     = [ "Michał Krzysteczko" ]
   spec.email       = [ "m.krzysteczko@icloud.com" ]
-  spec.homepage    = "https://github.com/trixbrix/consently"
+  spec.homepage    = "https://github.com/Xeross99/consently"
   spec.summary     = "GDPR cookie consent for Rails that actually blocks your analytics tags until the visitor agrees"
   spec.description = <<~TEXT.gsub(/\s+/, " ").strip
     Most Rails cookie banners ask for consent and then load Google Analytics
