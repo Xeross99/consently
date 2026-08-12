@@ -18,6 +18,16 @@ pageview.
 | **Proof of consent** | optional log in your own database; no third-party service, nothing leaves your servers |
 | **Install** | one initializer, three helpers in your layout |
 
+Before the click, and right after it - same page, no reload in between:
+
+| Blocked | Running |
+| --- | --- |
+| ![The banner, with every optional tag blocked](docs/banner.png) | ![The same page a click later, every tag running](docs/running.png) |
+
+The preferences panel, one category at a time:
+
+![The preferences panel with a checkbox per category](docs/preferences.png)
+
 ```ruby
 # config/initializers/consently.rb
 Consently.configure do |c|
@@ -112,6 +122,22 @@ end
 Scopes inherit the tags declared outside them and override by declaring the
 same provider again. The resolver can return anything - `Current.shop&.name`
 works just as well as a host.
+
+## The cookie policy writes itself
+
+```erb
+<h1>Cookie policy</h1>
+<p>Your own legal text.</p>
+
+<%= consently_policy %>
+```
+
+Every category, the vendors in it, the cookies each one sets and how long they
+last - rendered from the configuration your tags come from, so it cannot drift
+out of date. Add a tag to the initializer and it appears here, in the right
+category, with its cookies.
+
+![The generated cookie policy: categories, vendors, cookies and durations](docs/policy.png)
 
 ## Proof of consent
 
