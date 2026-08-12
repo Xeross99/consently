@@ -5,7 +5,11 @@ gemspec
 
 # CI runs the suite against several Rails versions; locally you get whatever
 # is current.
-gem "rails", ENV["RAILS_VERSION"] if ENV["RAILS_VERSION"]
+gem "rails", ENV["RAILS_VERSION"] unless ENV["RAILS_VERSION"].to_s.empty?
+
+# Rails 7.1's test runner calls Minitest with an argument list Minitest 6 no
+# longer accepts, so that combination pins the older one.
+gem "minitest", ENV["MINITEST_VERSION"] unless ENV["MINITEST_VERSION"].to_s.empty?
 
 gem "puma"
 gem "sqlite3"
