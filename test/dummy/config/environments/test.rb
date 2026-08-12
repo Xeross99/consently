@@ -9,6 +9,10 @@ Rails.application.configure do
   # While tests run files are not watched, reloading is not necessary.
   config.enable_reloading = false
 
+  # The dummy database is built by running the migrations, because a checked-in
+  # schema.rb would pin a Rails version and the gem is tested against several.
+  config.active_record.maintain_test_schema = false
+
   # Eager loading loads your entire application. When running a single test locally,
   # this is usually not necessary, and can slow down your test suite. However, it's
   # recommended that you enable it in continuous integration systems to ensure eager

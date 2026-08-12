@@ -1,4 +1,6 @@
-class CreateConsentlyConsentRecords < ActiveRecord::Migration[8.1]
+# The version is asked for at load time rather than hardcoded: this dummy
+# application is booted against every Rails the gem supports.
+class CreateConsentlyConsentRecords < ActiveRecord::Migration[ActiveRecord::Migration.current_version]
   def change
     create_table :consently_consent_records do |t|
       t.string :categories, null: false, default: ""
