@@ -1,0 +1,33 @@
+hu:
+  consently:
+    banner:
+      message: "Sütiket használunk, hogy az oldal működjön, és - a hozzájárulásoddal - hogy megértsük, hogyan használod, illetve releváns ajánlatokat mutassunk."
+      policy_link: "Olvasd el a süti szabályzatunkat."
+      accept_all: "Összes elfogadása"
+      reject_all: "Összes elutasítása"
+      preferences: "Beállítások"
+      save: "Választás mentése"
+      cancel: "Mégse"
+    preferences_link: "Süti beállítások"
+    policy:
+      granted: "hozzájárultál"
+      denied: "nincs hozzájárulás"
+      no_tags: "Ebben a kategóriában nincs semmi."
+      no_cookies: "Nem helyez el sütit."
+      cookie_name: "Süti"
+      cookie_duration: "Megőrzés"
+      duration_days: "%{count} nap"
+      duration_session: "a böngésző bezárásáig"
+      own_heading: "Maga a hozzájárulási süti"
+      own_body: "A választásod egyetlen sütiben van a böngésződben: az elfogadott kategóriák, e szabályzat verziója és az idő. Rólad semmi."
+      own_version: "Szabályzat verziója"
+    categories:
+      necessary:
+        name: "Szükséges"
+        description: "Az oldal működéséhez kellenek. Nem kapcsolhatók ki."
+      analytics:
+        name: "Statisztikai"
+        description: "Megmutatják, hogyan használod az oldalt, hogy fejleszthessük."
+      marketing:
+        name: "Marketing"
+        description: "Segítenek olyan ajánlatokat mutatni, amelyek érdekelhetnek."

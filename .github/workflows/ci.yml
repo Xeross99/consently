@@ -1,0 +1,78 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [ main ]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.4"
+          bundler-cache: true
+
+      - run: bin/rubocop -f github
+
+  test:
+    runs-on: ubuntu-latest
+
+    # A gem gets installed into applications the author does not control, so
+    # the suite runs against every Rails the gemspec claims to support.
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { ruby: "3.2", rails: "~> 7.1.0" }
+          - { ruby: "3.3", rails: "~> 7.2.0" }
+          - { ruby: "3.4", rails: "~> 8.0.0" }
+          - { ruby: "3.4", rails: "~> 8.1.0" }
+
+    name: test (ruby ${{ matrix.ruby }}, rails ${{ matrix.rails }})
+
+    env:
+      RAILS_VERSION: ${{ matrix.rails }}
+      RAILS_ENV: test
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby }}
+          bundler-cache: true
+
+      - run: bin/rails db:test:prepare test
+
+  system:
+    runs-on: ubuntu-latest
+    name: system tests (headless chrome)
+
+    env:
+      RAILS_ENV: test
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.4"
+          bundler-cache: true
+
+      - uses: browser-actions/setup-chrome@v1
+        with:
+          chrome-version: stable
+
+      - run: bin/rails db:test:prepare test:system
+
+      - name: Keep screenshots from failed system tests
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: screenshots
+          path: ${{ github.workspace }}/tmp/screenshots
+          if-no-files-found: ignore

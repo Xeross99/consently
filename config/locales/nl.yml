@@ -1,0 +1,33 @@
+nl:
+  consently:
+    banner:
+      message: "We gebruiken cookies om deze site te laten werken en, met jouw toestemming, om te begrijpen hoe de site gebruikt wordt en je relevante aanbiedingen te tonen."
+      policy_link: "Lees ons cookiebeleid."
+      accept_all: "Alles accepteren"
+      reject_all: "Alles weigeren"
+      preferences: "Instellingen"
+      save: "Keuze opslaan"
+      cancel: "Annuleren"
+    preferences_link: "Cookie-instellingen"
+    policy:
+      granted: "toegestaan"
+      denied: "niet toegestaan"
+      no_tags: "Niets in deze categorie."
+      no_cookies: "Plaatst geen cookies."
+      cookie_name: "Cookie"
+      cookie_duration: "Bewaard"
+      duration_days: "%{count} dagen"
+      duration_session: "tot je de browser sluit"
+      own_heading: "De toestemmingscookie zelf"
+      own_body: "Je keuze staat in één cookie in je browser: de categorieën die je toestond, de versie van dit beleid en het tijdstip. Niets over jou."
+      own_version: "Versie van het beleid"
+    categories:
+      necessary:
+        name: "Noodzakelijk"
+        description: "Nodig om de site te laten werken. Deze kun je niet uitzetten."
+      analytics:
+        name: "Statistieken"
+        description: "Laten ons zien hoe de site gebruikt wordt, zodat we hem kunnen verbeteren."
+      marketing:
+        name: "Marketing"
+        description: "Hiermee kunnen we je aanbiedingen tonen die bij je interesses passen."

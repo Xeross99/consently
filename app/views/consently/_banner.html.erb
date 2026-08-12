@@ -1,0 +1,93 @@
+<%# Plain CSS classes, no framework: see app/assets/stylesheets/consently.css.
+    The container stays in the DOM after a choice is made so that
+    `consently_preferences_link` has something to reopen. Run
+    `rails g consently:views` to take this file over into your own app. %>
+<div id="consently"
+     class="consently"
+     data-turbo-permanent
+     data-controller="consently-banner"
+     data-action="click@document->consently-banner#openFromLink"
+     data-consently-banner-open-class="consently__panel--open"
+     data-consently-banner-hidden-class="consently-hidden"
+     data-consently-banner-cookie-value="<%= Consently.config.cookie_name %>"
+     data-consently-banner-version-value="<%= Consently.config.consent_version %>"
+     data-consently-banner-max-age-value="<%= Consently.config.cookie_max_age %>"
+     data-consently-banner-path-value="<%= Consently.config.cookie_path %>"
+     data-consently-banner-categories-value="<%= categories.map(&:to_s).to_json %>"
+     data-consently-banner-google-consent-mode-value="<%= Consently.config.google_consent_mode %>"
+     data-consently-banner-respect-do-not-track-value="<%= Consently.config.respect_do_not_track %>"
+     data-consently-banner-respect-gpc-value="<%= Consently.config.respect_global_privacy_control %>"
+     data-consently-banner-reload-value="<%= Consently.config.reload_after_choice %>"
+     data-consently-banner-decided-value="<%= consent.given? %>"
+     data-consently-banner-log-url-value="<%= consently_log_url %>"
+     data-consently-banner-nonce-value="<%= content_security_policy_nonce %>">
+  <%# A non-modal dialog: it must be announced and reachable, but it must not
+      trap anyone who came to read the page. tabindex lets the reopen link put
+      focus here without adding the card to the tab order. %>
+  <div class="consently__card <%= "consently-hidden" if consent.given? %>"
+       data-consently-banner-target="card"
+       role="dialog"
+       aria-modal="false"
+       aria-labelledby="consently-message"
+       tabindex="-1">
+    <p class="consently__text" id="consently-message">
+      <%= t("consently.banner.message") %>
+      <% if policy_url.present? %>
+        <%= link_to t("consently.banner.policy_link"), policy_url, class: "consently__link" %>
+      <% end %>
+    </p>
+
+    <div class="consently__panel" id="consently-preferences" data-consently-banner-target="preferences">
+      <div class="consently__panel-inner">
+        <div class="consently__options">
+          <label class="consently__option">
+            <%# Always on, and shown that way rather than hidden: people look for it. %>
+            <%= tag.input type: "checkbox", checked: true, disabled: true %>
+            <span>
+              <span class="consently__option-name"><%= t("consently.categories.necessary.name") %></span>
+              <span class="consently__option-description"><%= t("consently.categories.necessary.description") %></span>
+            </span>
+          </label>
+
+          <% categories.each do |category| %>
+            <label class="consently__option">
+              <%= tag.input type: "checkbox", value: category, checked: consent.granted?(category),
+                    id: "consently-#{category}", data: { consently_banner_target: "category" } %>
+              <span>
+                <span class="consently__option-name"><%= t("consently.categories.#{category}.name", default: category.to_s.humanize) %></span>
+                <span class="consently__option-description"><%= t("consently.categories.#{category}.description", default: "") %></span>
+              </span>
+            </label>
+          <% end %>
+        </div>
+      </div>
+    </div>
+
+    <div class="consently__actions">
+      <button type="button" data-action="consently-banner#acceptAll" class="consently__button consently__button--primary">
+        <%= t("consently.banner.accept_all") %>
+      </button>
+      <button type="button" data-action="consently-banner#rejectAll" class="consently__button">
+        <%= t("consently.banner.reject_all") %>
+      </button>
+      <button type="button" data-action="consently-banner#openPreferences"
+              data-consently-banner-target="settingsButton"
+              aria-expanded="false"
+              aria-controls="consently-preferences"
+              class="consently__button consently__button--quiet">
+        <%= t("consently.banner.preferences") %>
+      </button>
+      <button type="button" data-action="consently-banner#savePreferences"
+              data-consently-banner-target="saveButton"
+              class="consently__button consently-hidden">
+        <%= t("consently.banner.save") %>
+      </button>
+      <%# Only offered while the panel is open - a way back out of it. %>
+      <button type="button" data-action="consently-banner#closePreferences"
+              data-consently-banner-target="cancelButton"
+              class="consently__button consently__button--quiet consently-hidden">
+        <%= t("consently.banner.cancel") %>
+      </button>
+    </div>
+  </div>
+</div>

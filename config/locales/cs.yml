@@ -1,0 +1,33 @@
+cs:
+  consently:
+    banner:
+      message: "Používáme soubory cookie, aby tento web fungoval, a s vaším souhlasem také k tomu, abychom rozuměli, jak jej používáte, a mohli vám ukazovat relevantní nabídky."
+      policy_link: "Přečtěte si naše zásady cookies."
+      accept_all: "Přijmout vše"
+      reject_all: "Odmítnout vše"
+      preferences: "Nastavení"
+      save: "Uložit volbu"
+      cancel: "Zrušit"
+    preferences_link: "Nastavení cookies"
+    policy:
+      granted: "souhlas udělen"
+      denied: "bez souhlasu"
+      no_tags: "V této kategorii nic není."
+      no_cookies: "Nenastavuje žádné cookies."
+      cookie_name: "Cookie"
+      cookie_duration: "Doba uložení"
+      duration_days: "%{count} dní"
+      duration_session: "do zavření prohlížeče"
+      own_heading: "Samotná cookie se souhlasem"
+      own_body: "Vaše volba je uložená v jedné cookie ve vašem prohlížeči: kategorie, se kterými jste souhlasili, verze těchto zásad a čas. Nic o vás."
+      own_version: "Verze zásad"
+    categories:
+      necessary:
+        name: "Nezbytné"
+        description: "Nutné pro fungování webu. Nelze je vypnout."
+      analytics:
+        name: "Analytické"
+        description: "Ukazují nám, jak web používáte, abychom jej mohli zlepšovat."
+      marketing:
+        name: "Marketingové"
+        description: "Umožňují nám ukazovat vám nabídky, které odpovídají vašim zájmům."

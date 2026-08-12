@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="<%= I18n.locale %>">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Consently demo</title>
+    <%= csrf_meta_tags %>
+
+    <%# CDN builds so the demo needs no toolchain of its own. A real app has
+        Tailwind and Stimulus already. %>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script type="importmap">
+      {
+        "imports": {
+          "@hotwired/stimulus": "https://cdn.jsdelivr.net/npm/@hotwired/stimulus@3.2.2/dist/stimulus.js",
+          "consently/banner_controller": "<%= asset_path("consently/banner_controller.js") %>"
+        }
+      }
+    </script>
+    <script type="module">
+      import { Application } from "@hotwired/stimulus"
+      import ConsentlyBannerController from "consently/banner_controller"
+
+      window.Stimulus = Application.start()
+      Stimulus.register("consently-banner", ConsentlyBannerController)
+    </script>
+
+    <%= consently_tags %>
+  </head>
+
+  <body class="bg-gray-50">
+    <%= consently_noscript_tags %>
+
+    <main class="mx-auto max-w-3xl px-6 py-16">
+      <h1 class="text-3xl font-semibold text-gray-900">Consently</h1>
+      <p class="mt-2 text-gray-600"><%= t("demo.intro_html") %></p>
+
+      <h2 class="mt-10 text-sm font-semibold uppercase tracking-wide text-gray-500"><%= t("demo.tags_heading") %></h2>
+      <ul class="mt-3 divide-y divide-gray-200 rounded-lg bg-white shadow-xs">
+        <% Consently.tags_for(request).each do |provider| %>
+          <li class="flex items-center justify-between px-4 py-3">
+            <span class="font-medium text-gray-900"><%= provider.key %></span>
+            <span class="flex items-center gap-x-3 text-sm">
+              <span class="text-gray-500"><%= provider.category %></span>
+              <% if consently_consent.granted?(provider.category) %>
+                <span class="rounded-full bg-green-100 px-2 py-0.5 font-semibold text-green-800"><%= t("demo.running") %></span>
+              <% else %>
+                <span class="rounded-full bg-gray-100 px-2 py-0.5 font-semibold text-gray-600"><%= t("demo.blocked") %></span>
+              <% end %>
+            </span>
+          </li>
+        <% end %>
+      </ul>
+
+      <h2 class="mt-10 text-sm font-semibold uppercase tracking-wide text-gray-500"><%= t("demo.consent_heading") %></h2>
+      <pre class="mt-3 overflow-x-auto rounded-lg bg-gray-900 p-4 text-sm text-gray-100"><%= consently_consent.given? ? JSON.pretty_generate(consently_consent.to_h) : t("demo.no_consent") %></pre>
+
+      <h2 class="mt-10 text-sm font-semibold uppercase tracking-wide text-gray-500"><%= t("demo.decisions_heading") %></h2>
+      <ul class="mt-3 space-y-1 text-sm text-gray-700">
+        <% @records.each do |record| %>
+          <li><%= record.created_at.strftime("%H:%M:%S") %> - <%= record.categories.presence&.join(", ") || t("demo.nothing_accepted") %> (v<%= record.consent_version %>)</li>
+        <% end %>
+        <% if @records.empty? %>
+          <li class="text-gray-500"><%= t("demo.nothing_logged") %></li>
+        <% end %>
+      </ul>
+
+      <p class="mt-10 text-sm text-gray-600">
+        <%= t("demo.languages") %>:
+        <%= safe_join(I18n.available_locales.map { |locale| link_to locale, demo_path(locale: locale), class: class_names("underline", "font-semibold text-gray-900" => locale == I18n.locale) }, " · ") %>
+      </p>
+      <p class="mt-2 text-sm text-gray-600">
+        <%= t("demo.changed_your_mind") %> <%= consently_preferences_link(class: "underline font-semibold") %>
+      </p>
+
+      <%= button_to t("demo.reset"), reset_demo_path(locale: params[:locale]), method: :delete,
+            class: "mt-6 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-xs outline-1 outline-gray-300 hover:bg-gray-50" %>
+      <p class="mt-1 text-xs text-gray-500"><%= t("demo.reset_hint") %></p>
+    </main>
+
+    <%= consently_banner %>
+  </body>
+</html>

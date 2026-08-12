@@ -1,0 +1,33 @@
+de:
+  consently:
+    banner:
+      message: "Wir verwenden Cookies, damit diese Website funktioniert - und mit Ihrer Einwilligung, um zu verstehen, wie sie genutzt wird, und Ihnen passende Angebote zu zeigen."
+      policy_link: "Zur Cookie-Richtlinie."
+      accept_all: "Alle akzeptieren"
+      reject_all: "Alle ablehnen"
+      preferences: "Einstellungen"
+      save: "Auswahl speichern"
+      cancel: "Abbrechen"
+    preferences_link: "Cookie-Einstellungen"
+    policy:
+      granted: "eingewilligt"
+      denied: "nicht eingewilligt"
+      no_tags: "Nichts in dieser Kategorie."
+      no_cookies: "Setzt keine Cookies."
+      cookie_name: "Cookie"
+      cookie_duration: "Speicherdauer"
+      duration_days: "%{count} Tage"
+      duration_session: "bis zum Schließen des Browsers"
+      own_heading: "Das Einwilligungs-Cookie selbst"
+      own_body: "Ihre Wahl liegt in einem Cookie in Ihrem Browser: die Kategorien, denen Sie zugestimmt haben, die Version dieser Richtlinie und die Uhrzeit. Nichts über Sie."
+      own_version: "Version der Richtlinie"
+    categories:
+      necessary:
+        name: "Notwendig"
+        description: "Für den Betrieb der Website erforderlich. Sie lassen sich nicht abschalten."
+      analytics:
+        name: "Statistik"
+        description: "Zeigen uns, wie die Website genutzt wird, damit wir sie verbessern können."
+      marketing:
+        name: "Marketing"
+        description: "Erlauben uns, Ihnen Angebote zu zeigen, die zu Ihren Interessen passen."

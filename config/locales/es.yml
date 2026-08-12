@@ -1,0 +1,33 @@
+es:
+  consently:
+    banner:
+      message: "Usamos cookies para que este sitio funcione y, con tu consentimiento, para entender cómo se usa y mostrarte ofertas relevantes."
+      policy_link: "Lee nuestra política de cookies."
+      accept_all: "Aceptar todo"
+      reject_all: "Rechazar todo"
+      preferences: "Ajustes"
+      save: "Guardar selección"
+      cancel: "Cancelar"
+    preferences_link: "Ajustes de cookies"
+    policy:
+      granted: "consentido"
+      denied: "sin consentimiento"
+      no_tags: "Nada en esta categoría."
+      no_cookies: "No instala cookies."
+      cookie_name: "Cookie"
+      cookie_duration: "Se conserva"
+      duration_days: "%{count} días"
+      duration_session: "hasta que cierres el navegador"
+      own_heading: "La propia cookie de consentimiento"
+      own_body: "Tu elección se guarda en una cookie de tu navegador: las categorías que aceptaste, la versión de esta política y la hora. Nada sobre ti."
+      own_version: "Versión de la política"
+    categories:
+      necessary:
+        name: "Necesarias"
+        description: "Imprescindibles para que el sitio funcione. No se pueden desactivar."
+      analytics:
+        name: "Analíticas"
+        description: "Nos muestran cómo se usa el sitio para poder mejorarlo."
+      marketing:
+        name: "Marketing"
+        description: "Nos permiten mostrarte ofertas acordes con tus intereses."

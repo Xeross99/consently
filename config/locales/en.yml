@@ -1,0 +1,33 @@
+en:
+  consently:
+    banner:
+      message: "We use cookies to run this site, and - with your consent - to understand how it is used and to show you relevant offers."
+      policy_link: "Read our cookie policy."
+      accept_all: "Accept all"
+      reject_all: "Reject all"
+      preferences: "Settings"
+      save: "Save choices"
+      cancel: "Cancel"
+    preferences_link: "Cookie settings"
+    policy:
+      granted: "you agreed"
+      denied: "not agreed"
+      no_tags: "Nothing in this category."
+      no_cookies: "Sets no cookies."
+      cookie_name: "Cookie"
+      cookie_duration: "Kept for"
+      duration_days: "%{count} days"
+      duration_session: "until you close the browser"
+      own_heading: "The consent cookie itself"
+      own_body: "Your choice is kept in one cookie in your browser: the categories you agreed to, the version of this policy and the time. Nothing about you."
+      own_version: "Policy version"
+    categories:
+      necessary:
+        name: "Necessary"
+        description: "Needed for the site to work. They cannot be switched off."
+      analytics:
+        name: "Analytics"
+        description: "Help us see how the site is used, so we can improve it."
+      marketing:
+        name: "Marketing"
+        description: "Let us show you offers that fit what you are interested in."

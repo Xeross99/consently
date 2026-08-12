@@ -1,0 +1,33 @@
+pl:
+  consently:
+    banner:
+      message: "Używamy plików cookie, żeby ta strona działała, a za Twoją zgodą także po to, by rozumieć, jak z niej korzystasz, i pokazywać Ci trafne oferty."
+      policy_link: "Przeczytaj naszą politykę cookies."
+      accept_all: "Akceptuję wszystkie"
+      reject_all: "Odrzuć wszystkie"
+      preferences: "Ustawienia"
+      save: "Zapisz wybór"
+      cancel: "Anuluj"
+    preferences_link: "Ustawienia cookies"
+    policy:
+      granted: "zgoda udzielona"
+      denied: "brak zgody"
+      no_tags: "Nic w tej kategorii."
+      no_cookies: "Nie ustawia ciasteczek."
+      cookie_name: "Ciasteczko"
+      cookie_duration: "Przechowywane"
+      duration_days: "%{count} dni"
+      duration_session: "do zamknięcia przeglądarki"
+      own_heading: "Samo ciasteczko zgody"
+      own_body: "Twój wybór trzymamy w jednym ciasteczku w Twojej przeglądarce: kategorie, na które się zgodziłeś, wersja tej polityki i czas. Nic o Tobie."
+      own_version: "Wersja polityki"
+    categories:
+      necessary:
+        name: "Niezbędne"
+        description: "Potrzebne do działania strony. Nie można ich wyłączyć."
+      analytics:
+        name: "Analityczne"
+        description: "Pokazują nam, jak korzystasz ze strony, dzięki czemu możemy ją ulepszać."
+      marketing:
+        name: "Marketingowe"
+        description: "Pozwalają pokazywać Ci oferty dopasowane do Twoich zainteresowań."

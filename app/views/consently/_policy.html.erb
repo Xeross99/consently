@@ -1,0 +1,85 @@
+<%# A cookie policy that cannot go stale: it is rendered from the same
+    configuration the tags are, so a tag added to the initializer shows up
+    here, in the right category, with the cookies it sets.
+
+    Plain CSS, scoped under .consently-policy - see the gem's stylesheet.
+    `rails g consently:views` to take it over. %>
+<div class="consently-policy">
+  <% Consently.config.categories.each do |category| %>
+    <% providers = tags.select { |provider| provider.category == category } %>
+
+    <section class="consently-policy__category">
+      <div class="consently-policy__heading">
+        <h2 class="consently-policy__title"><%= t("consently.categories.#{category}.name", default: category.to_s.humanize) %></h2>
+        <% if consent.granted?(category) %>
+          <span class="consently-policy__status consently-policy__status--granted"><%= t("consently.policy.granted") %></span>
+        <% else %>
+          <span class="consently-policy__status"><%= t("consently.policy.denied") %></span>
+        <% end %>
+      </div>
+      <p class="consently-policy__description"><%= t("consently.categories.#{category}.description", default: "") %></p>
+
+      <% if providers.empty? %>
+        <p class="consently-policy__empty"><%= t("consently.policy.no_tags") %></p>
+      <% else %>
+        <% providers.each do |provider| %>
+          <div class="consently-policy__vendor">
+            <p class="consently-policy__vendor-name">
+              <%= provider.key.to_s.titleize %>
+              <span class="consently-policy__vendor-id"><%= provider.options[:id] || provider.options[:domain] %></span>
+            </p>
+
+            <% if provider.cookies.empty? %>
+              <p class="consently-policy__empty"><%= t("consently.policy.no_cookies") %></p>
+            <% else %>
+              <table class="consently-policy__table">
+                <thead>
+                  <tr>
+                    <th><%= t("consently.policy.cookie_name") %></th>
+                    <th><%= t("consently.policy.cookie_duration") %></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% provider.cookies.each do |cookie| %>
+                    <tr>
+                      <td><code><%= cookie.name %></code></td>
+                      <td>
+                        <%= cookie.session? ? t("consently.policy.duration_session") : t("consently.policy.duration_days", count: cookie.days) %>
+                      </td>
+                    </tr>
+                  <% end %>
+                </tbody>
+              </table>
+            <% end %>
+          </div>
+        <% end %>
+      <% end %>
+    </section>
+  <% end %>
+
+  <section class="consently-policy__category">
+    <h2 class="consently-policy__title"><%= t("consently.policy.own_heading") %></h2>
+    <p class="consently-policy__description"><%= t("consently.policy.own_body") %></p>
+
+    <table class="consently-policy__table">
+      <thead>
+        <tr>
+          <th><%= t("consently.policy.cookie_name") %></th>
+          <th><%= t("consently.policy.cookie_duration") %></th>
+          <th><%= t("consently.policy.own_version") %></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code><%= Consently.config.cookie_name %></code></td>
+          <td><%= t("consently.policy.duration_days", count: Consently.config.cookie_max_age / 86_400) %></td>
+          <td><%= Consently.config.consent_version %></td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <p class="consently-policy__footer">
+    <%= consently_preferences_link %>
+  </p>
+</div>
