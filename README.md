@@ -1,5 +1,10 @@
 # Consently
 
+[![Gem](https://img.shields.io/gem/v/consently?color=%23e9573f)](https://rubygems.org/gems/consently)
+[![Downloads](https://img.shields.io/gem/dt/consently)](https://rubygems.org/gems/consently)
+[![CI](https://github.com/Xeross99/consently/actions/workflows/ci.yml/badge.svg)](https://github.com/Xeross99/consently/actions/workflows/ci.yml)
+[![MIT](https://img.shields.io/badge/licence-MIT-blue)](MIT-LICENSE)
+
 **GDPR cookie consent for Rails that actually blocks your tags.**
 
 Most banners ask for consent and load Google Analytics anyway. Consently is
@@ -61,6 +66,8 @@ gem "consently"
 bundle install
 rails g consently:install
 ```
+
+On RubyGems: <https://rubygems.org/gems/consently>
 
 The generator writes the initializer and registers the Stimulus controller in
 `app/javascript/controllers/index.js`. Nothing else to set up: the banner

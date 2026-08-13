@@ -111,8 +111,8 @@ module Consently
     # back to the tags declared outside any scope, and may override them by
     # declaring the same provider again.
     #
-    #   c.scope "trixbrix" do |s|
-    #     s.tag :google_analytics, id: "G-TRIX"
+    #   c.scope "shop.example.com" do |s|
+    #     s.tag :google_analytics, id: "G-SHOP00001"
     #   end
     def scope(name)
       scope = (@scopes[name.to_s] ||= Scope.new)
