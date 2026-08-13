@@ -5,6 +5,8 @@ en:
     intro_html: 'Four tags are configured here. Open the developer tools and look at the &lt;head&gt;: everything optional is a <code class="rounded bg-gray-200 px-1">&lt;script type="text/plain"&gt;</code> until you choose.'
     tags_heading: "Tags on this page"
     consent_heading: "Current consent"
+    embed_heading: "An embedded video"
+    embed_intro: "A YouTube iframe sets cookies with no script of ours, so it waits behind a placeholder until marketing consent arrives."
     decisions_heading: "Recorded decisions"
     running: "running"
     blocked: "blocked"
@@ -33,6 +35,8 @@ pl:
     intro_html: 'Skonfigurowane są tu cztery tagi. Otwórz narzędzia deweloperskie i zajrzyj do &lt;head&gt;: wszystko opcjonalne jest jako <code class="rounded bg-gray-200 px-1">&lt;script type="text/plain"&gt;</code>, dopóki nie zdecydujesz.'
     tags_heading: "Tagi na tej stronie"
     consent_heading: "Obecna zgoda"
+    embed_heading: "Osadzone wideo"
+    embed_intro: "Iframe z YouTube ustawia ciasteczka bez żadnego naszego skryptu, więc czeka za zasłonką do czasu zgody marketingowej."
     decisions_heading: "Zapisane decyzje"
     running: "działa"
     blocked: "zablokowany"
@@ -61,6 +65,8 @@ de:
     intro_html: 'Hier sind vier Tags konfiguriert. Öffnen Sie die Entwicklertools und sehen Sie in den &lt;head&gt;: alles Optionale ist ein <code class="rounded bg-gray-200 px-1">&lt;script type="text/plain"&gt;</code>, bis Sie sich entscheiden.'
     tags_heading: "Tags auf dieser Seite"
     consent_heading: "Aktuelle Einwilligung"
+    embed_heading: "Ein eingebettetes Video"
+    embed_intro: "Ein YouTube-iframe setzt Cookies ganz ohne Skript von uns und wartet deshalb hinter einem Platzhalter auf die Marketing-Einwilligung."
     decisions_heading: "Aufgezeichnete Entscheidungen"
     running: "läuft"
     blocked: "blockiert"
@@ -89,6 +95,8 @@ cs:
     intro_html: 'Jsou zde nastavené čtyři tagy. Otevřete vývojářské nástroje a podívejte se do &lt;head&gt;: vše volitelné je <code class="rounded bg-gray-200 px-1">&lt;script type="text/plain"&gt;</code>, dokud se nerozhodnete.'
     tags_heading: "Tagy na této stránce"
     consent_heading: "Aktuální souhlas"
+    embed_heading: "Vložené video"
+    embed_intro: "YouTube iframe nastavuje cookies bez jakéhokoli našeho skriptu, proto čeká za zástupným obsahem na marketingový souhlas."
     decisions_heading: "Zaznamenaná rozhodnutí"
     running: "běží"
     blocked: "blokováno"
@@ -117,6 +125,8 @@ es:
     intro_html: 'Aquí hay cuatro etiquetas configuradas. Abre las herramientas de desarrollo y mira el &lt;head&gt;: todo lo opcional es un <code class="rounded bg-gray-200 px-1">&lt;script type="text/plain"&gt;</code> hasta que elijas.'
     tags_heading: "Etiquetas en esta página"
     consent_heading: "Consentimiento actual"
+    embed_heading: "Un vídeo incrustado"
+    embed_intro: "Un iframe de YouTube instala cookies sin ningún script nuestro, así que espera tras un marcador hasta que llegue el consentimiento de marketing."
     decisions_heading: "Decisiones registradas"
     running: "activa"
     blocked: "bloqueada"
@@ -145,6 +155,8 @@ fr:
     intro_html: 'Quatre tags sont configurés ici. Ouvrez les outils de développement et regardez le &lt;head&gt; : tout ce qui est optionnel est un <code class="rounded bg-gray-200 px-1">&lt;script type="text/plain"&gt;</code> tant que vous n''avez pas choisi.'
     tags_heading: "Tags sur cette page"
     consent_heading: "Consentement actuel"
+    embed_heading: "Une vidéo intégrée"
+    embed_intro: "Un iframe YouTube dépose des cookies sans aucun script de notre part : il attend donc derrière un espace réservé l'accord marketing."
     decisions_heading: "Décisions enregistrées"
     running: "actif"
     blocked: "bloqué"
@@ -173,6 +185,8 @@ it:
     intro_html: 'Qui sono configurati quattro tag. Apri gli strumenti di sviluppo e guarda l''&lt;head&gt;: tutto ciò che è opzionale è uno <code class="rounded bg-gray-200 px-1">&lt;script type="text/plain"&gt;</code> finché non scegli.'
     tags_heading: "Tag su questa pagina"
     consent_heading: "Consenso attuale"
+    embed_heading: "Un video incorporato"
+    embed_intro: "Un iframe di YouTube imposta cookie senza alcuno script nostro, quindi aspetta dietro un segnaposto il consenso marketing."
     decisions_heading: "Decisioni registrate"
     running: "attivo"
     blocked: "bloccato"
@@ -201,6 +215,8 @@ nl:
     intro_html: 'Hier zijn vier tags ingesteld. Open de ontwikkelaarstools en kijk in de &lt;head&gt;: alles wat optioneel is, is een <code class="rounded bg-gray-200 px-1">&lt;script type="text/plain"&gt;</code> totdat je kiest.'
     tags_heading: "Tags op deze pagina"
     consent_heading: "Huidige toestemming"
+    embed_heading: "Een ingesloten video"
+    embed_intro: "Een YouTube-iframe plaatst cookies zonder enig script van ons en wacht daarom achter een tijdelijke plek op marketingtoestemming."
     decisions_heading: "Vastgelegde keuzes"
     running: "actief"
     blocked: "geblokkeerd"
@@ -229,6 +245,8 @@ sk:
     intro_html: 'Sú tu nastavené štyri tagy. Otvorte vývojárske nástroje a pozrite sa do &lt;head&gt;: všetko voliteľné je <code class="rounded bg-gray-200 px-1">&lt;script type="text/plain"&gt;</code>, kým sa nerozhodnete.'
     tags_heading: "Tagy na tejto stránke"
     consent_heading: "Aktuálny súhlas"
+    embed_heading: "Vložené video"
+    embed_intro: "YouTube iframe nastavuje cookies bez akéhokoľvek nášho skriptu, preto čaká za zástupným obsahom na marketingový súhlas."
     decisions_heading: "Zaznamenané rozhodnutia"
     running: "beží"
     blocked: "blokované"
@@ -257,6 +275,8 @@ hu:
     intro_html: 'Négy címke van itt beállítva. Nyisd meg a fejlesztői eszközöket és nézd meg a &lt;head&gt; részt: minden opcionális elem <code class="rounded bg-gray-200 px-1">&lt;script type="text/plain"&gt;</code>, amíg nem választasz.'
     tags_heading: "Címkék ezen az oldalon"
     consent_heading: "Jelenlegi hozzájárulás"
+    embed_heading: "Beágyazott videó"
+    embed_intro: "A YouTube iframe a mi szkriptünk nélkül is sütiket helyez el, ezért helyőrző mögött vár a marketing hozzájárulásra."
     decisions_heading: "Rögzített döntések"
     running: "fut"
     blocked: "blokkolva"
