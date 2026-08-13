@@ -21,7 +21,9 @@ module Consently
         append_to_file index, <<~JS
 
           import ConsentlyBannerController from "consently/banner_controller"
+          import ConsentlyEmbedController from "consently/embed_controller"
           application.register("consently-banner", ConsentlyBannerController)
+          application.register("consently-embed", ConsentlyEmbedController)
         JS
       end
 

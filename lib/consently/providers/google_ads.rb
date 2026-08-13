@@ -3,6 +3,7 @@ module Consently
     class GoogleAds < Base
       self.provider_key = :google_ads
       self.default_category = :marketing
+      self.google = true
 
       cookie "_gcl_au", days: 90
 

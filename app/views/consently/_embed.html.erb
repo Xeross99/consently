@@ -1,0 +1,24 @@
+<%# An iframe that waits for consent. The src lives in a data attribute until
+    then, so nothing is requested from the vendor and no cookie is set. %>
+<div class="consently-embed"
+     style="--consently-embed-ratio: <%= ratio %>"
+     data-controller="consently-embed"
+     data-consently-embed-category-value="<%= category %>"
+     data-consently-embed-src-value="<%= src %>"
+     data-consently-embed-title-value="<%= title %>"
+     data-consently-embed-attributes-value="<%= iframe_options.to_json %>"
+     data-consently-embed-hidden-class="consently-hidden"
+     data-action="consently:change@document->consently-embed#granted">
+  <% if granted %>
+    <%= tag.iframe src: src, title: title, loading: "lazy", allowfullscreen: true,
+          class: "consently-embed__frame", **iframe_options %>
+  <% end %>
+
+  <div class="consently-embed__placeholder <%= "consently-hidden" if granted %>"
+       data-consently-embed-target="placeholder">
+    <p class="consently-embed__text"><%= t("consently.embed.blocked", category: t("consently.categories.#{category}.name", default: category.to_s.humanize)) %></p>
+    <button type="button" data-consently-open class="consently__button consently__button--primary">
+      <%= t("consently.embed.allow") %>
+    </button>
+  </div>
+</div>

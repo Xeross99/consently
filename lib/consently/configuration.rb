@@ -5,7 +5,15 @@ module Consently
 
     # Where the visitor's choice is kept. It is read by JavaScript, so it is a
     # plain cookie rather than a signed one.
-    attr_accessor :cookie_name, :cookie_max_age, :cookie_path
+    #
+    # Set cookie_domain to ".example.com" when the site spans subdomains -
+    # without it a consent given on www does not count on shop.
+    attr_accessor :cookie_name, :cookie_max_age, :cookie_path, :cookie_domain
+
+    # How long a consent stays valid, regardless of the cookie's own lifetime.
+    # Guidance across the EU converges on asking again about once a year; nil
+    # leaves the cookie to expire on its own.
+    attr_accessor :consent_max_age
 
     # Bump this whenever the policy changes: an older consent stops counting
     # and the banner asks again.
@@ -15,10 +23,32 @@ module Consently
     #   c.enabled = ->(request) { Rails.env.production? }
     attr_accessor :enabled
 
-    # Emits Google's consent mode v2 defaults (everything denied) before any
-    # Google tag, and updates them when the visitor chooses. Leave it on if
-    # you use any Google product.
-    attr_accessor :google_consent_mode
+    # Google's consent mode v2. Three settings:
+    #
+    #   :basic     - defaults denied, and Google's own tags stay blocked until
+    #                the visitor agrees. Nothing about them reaches Google
+    #                before consent. The default, and the strict reading.
+    #   :advanced  - defaults denied, but Google's tags load right away and
+    #                send cookieless pings, which is what lets Google Ads
+    #                model the conversions of visitors who said no. More data,
+    #                and a request to Google either way - ask your lawyer.
+    #   false      - no consent mode at all.
+    #
+    # `true` is read as :basic.
+    attr_reader :google_consent_mode
+
+    def google_consent_mode=(mode)
+      @google_consent_mode = case mode
+      when true, :basic then :basic
+      when :advanced then :advanced
+      when false, nil then false
+      else raise ArgumentError, "google_consent_mode must be :basic, :advanced or false"
+      end
+    end
+
+    def advanced_google_consent_mode?
+      google_consent_mode == :advanced
+    end
 
     # Store a row per decision, as proof of consent. Needs the engine mounted
     # and the migration from `rails g consently:consent_log`.
@@ -74,9 +104,11 @@ module Consently
       @cookie_name = "consently"
       @cookie_max_age = 60 * 60 * 24 * 180 # six months, the usual guidance
       @cookie_path = "/"
+      @cookie_domain = nil
+      @consent_max_age = nil
       @consent_version = 1
       @enabled = true
-      @google_consent_mode = true
+      @google_consent_mode = :basic
       @stylesheet = true
       @log_consents = false
       @respect_do_not_track = false

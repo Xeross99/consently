@@ -9,6 +9,13 @@ nl:
       save: "Keuze opslaan"
       cancel: "Annuleren"
     preferences_link: "Cookie-instellingen"
+    embed:
+      blocked: "Deze inhoud komt van een andere site en heeft je toestemming voor %{category} nodig."
+      allow: "Toestaan en tonen"
+      title_youtube: "Video"
+      title_vimeo: "Video"
+      title_google_maps: "Kaart"
+      title_default: "Ingesloten inhoud"
     policy:
       granted: "toegestaan"
       denied: "niet toegestaan"

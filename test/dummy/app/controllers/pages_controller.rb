@@ -22,4 +22,10 @@ class PagesController < ApplicationController
 
   def show
   end
+
+  # Stands in for a thank-you page: the ecommerce helper fed with objects that
+  # are not hashes, which is the case the shape mapping exists for.
+  def checkout
+    @items = [ EcommerceTest::LineItem.new(sku: "TB-001", name: "Straight track", price: 12.45, quantity: 2, category: "Track") ]
+  end
 end

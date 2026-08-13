@@ -9,6 +9,13 @@ sk:
       save: "Uložiť voľbu"
       cancel: "Zrušiť"
     preferences_link: "Nastavenia cookies"
+    embed:
+      blocked: "Tento obsah sa načítava z inej stránky a vyžaduje váš súhlas pre kategóriu %{category}."
+      allow: "Povoliť a zobraziť"
+      title_youtube: "Video"
+      title_vimeo: "Video"
+      title_google_maps: "Mapa"
+      title_default: "Vložený obsah"
     policy:
       granted: "súhlas udelený"
       denied: "bez súhlasu"

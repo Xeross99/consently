@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.2.0 (unreleased)
+
+- `consently_embed` for videos and maps: a YouTube or Vimeo iframe, or a
+  Google map, waits behind a placeholder until its category is granted and
+  then appears without a reload.
+- `consently_ecommerce` builds GA4 ecommerce events from your own line items
+  or products, clearing the previous `ecommerce` object the way Google asks.
+- `google_consent_mode` now takes `:basic` (the previous behaviour) or
+  `:advanced`, which lets Google's own tags load denied so Ads can model the
+  conversions of visitors who refused.
+- `cookie_domain`, so one consent covers every subdomain.
+- `consent_max_age`, to ask again after a year without bumping the policy
+  version.
+
 ## 0.1.0 (2026-08-12)
 
 First release.

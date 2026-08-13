@@ -9,6 +9,13 @@ de:
       save: "Auswahl speichern"
       cancel: "Abbrechen"
     preferences_link: "Cookie-Einstellungen"
+    embed:
+      blocked: "Dieser Inhalt wird von einer anderen Website geladen und braucht Ihre Einwilligung für %{category}."
+      allow: "Erlauben und anzeigen"
+      title_youtube: "Video"
+      title_vimeo: "Video"
+      title_google_maps: "Karte"
+      title_default: "Eingebetteter Inhalt"
     policy:
       granted: "eingewilligt"
       denied: "nicht eingewilligt"

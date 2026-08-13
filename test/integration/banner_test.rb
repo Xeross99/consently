@@ -88,6 +88,15 @@ class BannerTest < ActionDispatch::IntegrationTest
     assert_select "#consently-preferences"
   end
 
+  test "the cookie domain is passed on, so a consent can cover subdomains" do
+    get "/page"
+    assert_select "#consently[data-consently-banner-domain-value='']"
+
+    Consently.config.cookie_domain = ".example.com"
+    get "/page"
+    assert_select "#consently[data-consently-banner-domain-value='.example.com']"
+  end
+
   test "the log url is left empty unless consent logging is on" do
     get "/page"
     assert_select "#consently[data-consently-banner-log-url-value='']"

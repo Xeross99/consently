@@ -76,6 +76,31 @@ class ConsentTest < ApplicationSystemTestCase
     assert_checked_field "consently-analytics"
   end
 
+  test "a blocked embed becomes an iframe the moment its category is granted" do
+    visit "/embeds"
+
+    assert_no_selector "iframe", visible: :all
+    assert_selector "button", text: "Allow and show"
+
+    click_on "Accept all"
+
+    # Marketing and analytics both granted, so every embed on the page appears.
+    assert_selector "iframe.consently-embed__frame", count: 4, visible: :all
+    assert_no_selector "button", text: "Allow and show"
+  end
+
+  test "an embed whose category was refused stays a placeholder" do
+    visit "/embeds"
+
+    click_on "Settings"
+    check "consently-analytics"
+    click_on "Save choices"
+
+    # The analytics one is the Vimeo embed; the marketing ones keep waiting.
+    assert_selector "iframe[src*='vimeo']", count: 1, visible: :all
+    assert_no_selector "iframe[src*='youtube']", visible: :all
+  end
+
   test "the tags are blocked again once the policy version moves on" do
     visit "/page"
     click_on "Accept all"

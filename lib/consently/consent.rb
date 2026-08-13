@@ -17,7 +17,7 @@ module Consently
 
     # Never raises: a cookie can be truncated, hand-edited or left over from an
     # older format, and none of that should take a page down.
-    def self.from_cookie(raw, version:)
+    def self.from_cookie(raw, version:, max_age: nil)
       return none if raw.blank?
 
       data = begin
@@ -30,12 +30,25 @@ module Consently
       # A consent given against an older policy version counts as no consent:
       # the banner asks again and nothing runs in the meantime.
       return none unless data["v"].to_s == version.to_s
+      return none if expired?(data["t"], max_age)
 
       new(
         categories: Array(data["c"]).map { |category| category.to_s.to_sym },
         version: data["v"],
         recorded_at: data["t"]
       )
+    end
+
+    # A consent older than max_age is asked for again, whatever the cookie's
+    # own expiry says. An unreadable timestamp is treated as too old: the only
+    # safe reading when we cannot tell when it was given.
+    def self.expired?(recorded_at, max_age)
+      return false if max_age.nil?
+      return true if recorded_at.blank?
+
+      Time.parse(recorded_at.to_s) < Time.now.utc - max_age.to_i
+    rescue ArgumentError
+      true
     end
 
     def initialize(categories: [], version: nil, recorded_at: nil, given: true)

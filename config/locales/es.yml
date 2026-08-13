@@ -9,6 +9,13 @@ es:
       save: "Guardar selección"
       cancel: "Cancelar"
     preferences_link: "Ajustes de cookies"
+    embed:
+      blocked: "Este contenido se carga desde otro sitio y necesita tu consentimiento de %{category}."
+      allow: "Permitir y mostrar"
+      title_youtube: "Vídeo"
+      title_vimeo: "Vídeo"
+      title_google_maps: "Mapa"
+      title_default: "Contenido incrustado"
     policy:
       granted: "consentido"
       denied: "sin consentimiento"

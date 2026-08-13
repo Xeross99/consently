@@ -16,6 +16,7 @@ export default class extends Controller {
     version: { type: String, default: "1" },
     maxAge: { type: Number, default: 60 * 60 * 24 * 180 },
     path: { type: String, default: "/" },
+    domain: String,
     categories: Array,
     googleConsentMode: { type: Boolean, default: true },
     respectDoNotTrack: { type: Boolean, default: false },
@@ -105,8 +106,10 @@ export default class extends Controller {
   #writeCookie(categories) {
     const value = JSON.stringify({ v: this.versionValue, c: categories, t: new Date().toISOString() })
     const secure = window.location.protocol === "https:" ? "; Secure" : ""
+    // A domain of ".example.com" is what carries the choice across subdomains.
+    const domain = this.domainValue ? `; domain=${this.domainValue}` : ""
 
-    document.cookie = `${this.cookieValue}=${encodeURIComponent(value)}; path=${this.pathValue}; max-age=${this.maxAgeValue}; SameSite=Lax${secure}`
+    document.cookie = `${this.cookieValue}=${encodeURIComponent(value)}; path=${this.pathValue}${domain}; max-age=${this.maxAgeValue}; SameSite=Lax${secure}`
   }
 
   #activateScripts(categories) {

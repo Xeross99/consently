@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <%= csrf_meta_tags %>
+    <%= javascript_importmap_tags %>
+    <%= consently_tags %>
+  </head>
+  <body>
+    <%= consently_embed :youtube, "dQw4w9WgXcQ" %>
+    <%= consently_embed :vimeo, "76979871", category: :analytics %>
+    <%= consently_embed :google_maps, "Bahnhofstrasse 12, Berlin" %>
+    <%= consently_embed :custom, "https://example.com/widget", title: "Widget" %>
+    <%= consently_banner %>
+  </body>
+</html>

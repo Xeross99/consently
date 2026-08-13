@@ -9,6 +9,13 @@ hu:
       save: "Választás mentése"
       cancel: "Mégse"
     preferences_link: "Süti beállítások"
+    embed:
+      blocked: "Ez a tartalom másik oldalról töltődik be, és a(z) %{category} kategóriához adott hozzájárulásod kell hozzá."
+      allow: "Engedélyezés és megjelenítés"
+      title_youtube: "Videó"
+      title_vimeo: "Videó"
+      title_google_maps: "Térkép"
+      title_default: "Beágyazott tartalom"
     policy:
       granted: "hozzájárultál"
       denied: "nincs hozzájárulás"

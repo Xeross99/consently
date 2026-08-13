@@ -9,6 +9,13 @@ pl:
       save: "Zapisz wybór"
       cancel: "Anuluj"
     preferences_link: "Ustawienia cookies"
+    embed:
+      blocked: "Ta treść ładuje się z innej strony i wymaga Twojej zgody na kategorię %{category}."
+      allow: "Zezwól i pokaż"
+      title_youtube: "Wideo"
+      title_vimeo: "Wideo"
+      title_google_maps: "Mapa"
+      title_default: "Osadzona treść"
     policy:
       granted: "zgoda udzielona"
       denied: "brak zgody"

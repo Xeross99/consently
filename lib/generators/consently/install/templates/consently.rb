@@ -25,9 +25,16 @@ Consently.configure do |c|
   # not - switch it on if you want it treated the same way.
   # c.respect_do_not_track = true
 
-  # Google consent mode v2: defaults denied before any Google tag, updated
-  # when the visitor chooses. Leave on if you use anything Google.
-  c.google_consent_mode = true
+# Google consent mode v2. :basic keeps Google's tags off the page until the
+# visitor agrees; :advanced loads them denied, so Ads can model refused
+# conversions - more data, and a request to Google either way.
+c.google_consent_mode = :basic
+
+# One consent across subdomains needs the domain spelled out.
+# c.cookie_domain = ".example.com"
+
+# Ask again after a while, whatever the cookie's own lifetime says.
+# c.consent_max_age = 12.months
 
   # Store a row per decision as proof of consent. Needs the migration from
   # `rails g consently:consent_log` and the engine mounted in routes.rb:

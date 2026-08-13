@@ -108,7 +108,19 @@ c.category :personalization
 visitor agrees, and the choice is kept in a `consently` cookie for six months.
 
 Change your policy? Bump `c.consent_version` and every older consent stops
-counting; the banner asks again.
+counting; the banner asks again. To ask again on a schedule as well - the
+guidance across the EU converges on about a year - set an age:
+
+```ruby
+c.consent_max_age = 12.months
+```
+
+Spanning subdomains? Say so, or a consent given on `www` will not count on
+`shop`:
+
+```ruby
+c.cookie_domain = ".example.com"
+```
 
 ## Per-domain, per-tenant
 
@@ -220,13 +232,63 @@ button carries `aria-expanded` and `aria-controls`, reopening the panel moves
 focus into it, and the animation gives way to `prefers-reduced-motion`. Nobody
 is trapped in a focus cycle they did not ask for.
 
-## Events
+## Ecommerce events
+
+GA4 wants a particular shape, and your models are not it. Hand the helper
+whatever you have:
 
 ```erb
-<%= consently_data_layer_push("purchase", value: 120, currency: "EUR") %>
+<%= consently_ecommerce "purchase", items: @order.line_items,
+      value: @order.total, currency: "EUR", transaction_id: @order.number %>
 ```
 
-Renders nothing when analytics consent is missing.
+Items may be hashes already in GA4 shape, or any object answering to
+`sku`/`id`, `name`, `price`, `quantity`, `category`, `brand`, `variant` - a
+line item or a product usually does. The previous `ecommerce` object is
+cleared first, as Google asks, so two events on one page cannot bleed into
+each other.
+
+Anything else:
+
+```erb
+<%= consently_data_layer_push "newsletter_signup", source: "footer" %>
+```
+
+Both render nothing at all when analytics consent is missing.
+
+## Embedded videos and maps
+
+Blocking scripts is half the job: a YouTube iframe sets cookies on its own.
+
+```erb
+<%= consently_embed :youtube, "dQw4w9WgXcQ" %>
+<%= consently_embed :vimeo, "76979871", category: :analytics %>
+<%= consently_embed :google_maps, "Bahnhofstrasse 12, Berlin" %>
+<%= consently_embed :custom, "https://example.com/widget", title: "Widget", ratio: "4 / 3" %>
+```
+
+Until the category is granted the visitor gets a placeholder the same size as
+the embed - so nothing jumps - with a button that opens the preferences panel.
+The iframe appears the moment they agree, without a reload. YouTube is embedded
+through `youtube-nocookie.com`.
+
+## Google consent mode: basic or advanced
+
+```ruby
+c.google_consent_mode = :basic    # default
+c.google_consent_mode = :advanced
+```
+
+**Basic** keeps Google's tags off the page until consent: nothing about the
+visitor reaches Google before they agree.
+
+**Advanced** loads them right away with everything denied, so they send
+cookieless pings and Google Ads can model the conversions of visitors who said
+no. More data for you, a request to Google either way. Which one is defensible
+is a legal call, not a technical one - the gem simply does what you set.
+
+Either way the defaults are emitted before any Google tag and updated the
+moment the visitor chooses.
 
 ## Styling
 
@@ -284,7 +346,9 @@ Helpers:
 | `consently_banner` | the banner, the panel, and the JavaScript that releases blocked tags |
 | `consently_policy` | the generated cookie policy: categories, vendors, cookies, durations |
 | `consently_preferences_link` | "Cookie settings" link; anything with `data-consently-open` reopens the panel |
-| `consently_data_layer_push(event, **payload)` | a dataLayer event, rendered only with analytics consent |
+| `consently_ecommerce(event, items:, **params)` | a GA4 ecommerce event, items mapped from your own objects |
+| `consently_data_layer_push(event, **payload)` | any other dataLayer event, rendered only with analytics consent |
+| `consently_embed(kind, id, category:, ratio:)` | a video or map that waits for consent |
 | `consently_consent` | the current `Consently::Consent`; `granted?(:analytics)` in your own views |
 
 Configuration:
@@ -297,10 +361,11 @@ Configuration:
 | `c.consent_version` | bump it and every older consent stops counting |
 | `c.enabled` | `true`, `false`, or a callable taking the request |
 | `c.reload_after_choice` | reload once a choice is made; off by default |
-| `c.google_consent_mode` | consent mode v2 defaults and updates; on by default |
+| `c.google_consent_mode` | `:basic` (default), `:advanced`, or `false` |
 | `c.log_consents`, `c.consent_subject` | store proof of each decision, optionally naming who |
 | `c.stylesheet` | link the banner's CSS; off if you style it yourself |
-| `c.cookie_name`, `c.cookie_max_age`, `c.cookie_path` | where the choice is kept |
+| `c.cookie_name`, `c.cookie_max_age`, `c.cookie_path`, `c.cookie_domain` | where the choice is kept |
+| `c.consent_max_age` | ask again after this long, whatever the cookie says |
 | `c.respect_do_not_track`, `c.respect_global_privacy_control` | treat an opt-out signal as a rejection |
 | `c.consent_required` | who has to be asked at all; false means no banner and everything granted |
 

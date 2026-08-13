@@ -3,6 +3,7 @@ module Consently
     class GoogleTagManager < Base
       self.provider_key = :google_tag_manager
       self.default_category = :analytics
+      self.google = true
 
       # None of its own: whatever it loads brings its own cookies, so list
       # those tags here as well if you manage them through the container.

@@ -22,6 +22,15 @@ module Consently
           klass.new(**options)
         end
 
+# Whether this vendor is one of Google's, which is what advanced
+# consent mode is about: those tags may load before consent because
+# they respect the denied defaults themselves.
+attr_writer :google
+
+def google?
+  !!@google
+end
+
         # Set by each subclass; where a vendor is unambiguous (Plausible does
         # not touch cookies) it can say :necessary and load right away.
         attr_accessor :default_category
@@ -58,6 +67,10 @@ module Consently
       # Array<Consently::Script>
       def scripts
         []
+      end
+
+      def google?
+        self.class.google?
       end
 
       # Array<Consently::Cookie> - what this tag leaves in the browser.

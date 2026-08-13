@@ -5,6 +5,7 @@ module Consently
     class GoogleAnalytics < Base
       self.provider_key = :google_analytics
       self.default_category = :analytics
+      self.google = true
 
       # What GA4 leaves behind. The container-scoped one is written per
       # measurement id, hence the wildcard.

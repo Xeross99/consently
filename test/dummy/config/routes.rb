@@ -6,4 +6,6 @@ Rails.application.routes.draw do
   delete "demo/reset" => "pages#reset", as: :reset_demo
   get "cookies" => "pages#cookie_policy", as: :cookie_policy
   get "page" => "pages#show"
+  get "checkout" => "pages#checkout"
+  get "embeds" => "pages#embeds"
 end

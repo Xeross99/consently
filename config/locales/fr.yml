@@ -9,6 +9,13 @@ fr:
       save: "Enregistrer mes choix"
       cancel: "Annuler"
     preferences_link: "Paramètres des cookies"
+    embed:
+      blocked: "Ce contenu provient d'un autre site et nécessite votre accord pour %{category}."
+      allow: "Autoriser et afficher"
+      title_youtube: "Vidéo"
+      title_vimeo: "Vidéo"
+      title_google_maps: "Carte"
+      title_default: "Contenu intégré"
     policy:
       granted: "accepté"
       denied: "non accepté"

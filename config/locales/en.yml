@@ -9,6 +9,13 @@ en:
       save: "Save choices"
       cancel: "Cancel"
     preferences_link: "Cookie settings"
+    embed:
+      blocked: "This content is loaded from another site and needs your %{category} consent."
+      allow: "Allow and show"
+      title_youtube: "Video"
+      title_vimeo: "Video"
+      title_google_maps: "Map"
+      title_default: "Embedded content"
     policy:
       granted: "you agreed"
       denied: "not agreed"

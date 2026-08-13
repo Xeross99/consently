@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <%= csrf_meta_tags %>
+    <%= javascript_importmap_tags %>
+    <%= consently_tags %>
+  </head>
+  <body>
+    <% if params[:hash] %>
+      <%= consently_ecommerce("purchase", items: [ { item_id: "RAW-1", item_name: "Already shaped", price: 9.99, quantity: 1 } ],
+            value: 9.99, currency: "EUR", transaction_id: "1234") %>
+    <% else %>
+      <%= consently_ecommerce("purchase", items: @items, value: 24.9, currency: "EUR", transaction_id: "1234") %>
+    <% end %>
+    <%= consently_banner %>
+  </body>
+</html>
