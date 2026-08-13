@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Consently — GDPR cookie consent for Rails that actually blocks your tags</title>
+<meta name="description" content="A Rails gem that renders every non-essential tag as an inert script the browser never fetches, and turns it into a live one the instant the visitor agrees. Try it on this page.">
+<meta property="og:title" content="Consently">
+<meta property="og:description" content="GDPR cookie consent for Rails that actually blocks your tags. Try it on this page.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='26' font-size='26'>&#127850;</text></svg>">
+<!-- The gem's own stylesheet, copied unchanged from app/assets/stylesheets/consently.css. -->
+<link rel="stylesheet" href="assets/consently.css">
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+
+<header class="masthead wrap">
+  <p class="eyebrow">consently <strong>0.2.0</strong> &middot; rails &ge; 7.1 &middot; mit</p>
+  <h1>GDPR cookie consent for Rails that actually blocks your tags.</h1>
+  <p class="lede">
+    Most banners ask for consent and load Google Analytics anyway. Consently is
+    the other half. Declare your tags once; every non-essential one is rendered as
+    an inert <code>&lt;script type="text/plain"&gt;</code> the browser will not even fetch, and
+    becomes a live script <strong>the instant the visitor agrees</strong> — no page reload, no lost pageview.
+  </p>
+  <p class="links">
+    <a href="https://rubygems.org/gems/consently">RubyGems</a>
+    <a href="https://github.com/Xeross99/consently">GitHub</a>
+    <a href="https://github.com/Xeross99/consently/blob/main/CHANGELOG.md">Changelog</a>
+    <a href="https://github.com/Xeross99/consently/blob/main/MIT-LICENSE">MIT licence</a>
+  </p>
+</header>
+
+<!-- ===================== The demo ===================== -->
+
+<section class="demo wrap--wide" id="demo">
+  <div class="wrap">
+    <p class="section-mark">Try it</p>
+    <h2>Four tags, blocked, on this page</h2>
+    <p>
+      This page has Google Tag Manager, Google Analytics 4, Microsoft Clarity and
+      a Meta Pixel configured. None of them has run. The banner is at the bottom of
+      your screen — press something and watch all five panels move at once.
+    </p>
+  </div>
+
+  <div class="demo-bar">
+    <button type="button" class="button" id="demo-reset">Reset the demo</button>
+    <label>Language
+      <select id="demo-locale">
+        <option value="en">English</option>
+        <option value="pl">Polski</option>
+        <option value="de">Deutsch</option>
+        <option value="fr">Français</option>
+        <option value="es">Español</option>
+        <option value="it">Italiano</option>
+        <option value="nl">Nederlands</option>
+        <option value="cs">Čeština</option>
+        <option value="sk">Slovenčina</option>
+        <option value="hu">Magyar</option>
+      </select>
+    </label>
+    <label>Accent <input type="color" id="demo-accent" value="#111827"></label>
+    <label>Radius <input type="range" id="demo-radius" min="0" max="1.5" step="0.05" value="0.75"></label>
+    <span class="state" id="demo-state">no consent yet</span>
+  </div>
+
+  <div class="panels">
+    <div class="panel" id="panel-tags">
+      <h3>Your tags <span>consently_tags</span></h3>
+      <table>
+        <thead><tr><th>Vendor</th><th>Category</th><th>State</th></tr></thead>
+        <tbody></tbody>
+      </table>
+      <p>A blocked tag is on the page, in full, with everything it needs — it just is not a script yet.</p>
+    </div>
+
+    <div class="panel" id="panel-requests">
+      <h3>Requests to vendors <span>Resource Timing</span></h3>
+      <div class="panel-body"></div>
+      <p>Read from <code>performance.getEntriesByType("resource")</code>: the browser's own record, not ours.</p>
+    </div>
+
+    <div class="panel" id="panel-cookies">
+      <h3>Cookies in your browser <span>document.cookie</span></h3>
+      <div class="panel-body"></div>
+    </div>
+
+    <div class="panel" id="panel-datalayer">
+      <h3>dataLayer <span>consent mode v2</span></h3>
+      <pre><code></code></pre>
+      <p>Denied before any Google tag loads, updated the moment you choose.</p>
+    </div>
+
+    <div class="panel panel--full" id="panel-markup">
+      <h3>What is in the page right now <span>&lt;head&gt;</span></h3>
+      <pre><code></code></pre>
+    </div>
+
+    <div class="panel">
+      <h3>An embedded video <span>consently_embed</span></h3>
+      <div id="demo-embed"></div>
+      <p>A YouTube iframe sets cookies with no script of yours, so it waits behind a placeholder of the same size until marketing consent arrives. Its button opens the preferences panel — tick Marketing there, save, and the video appears in place.</p>
+    </div>
+
+    <div class="panel" id="demo-policy-panel">
+      <h3>Your cookie policy <span>consently_policy</span></h3>
+      <div id="demo-policy"></div>
+    </div>
+  </div>
+
+  <p class="hint">The banner is pinned to the bottom of the window. Accept, reject, or open Settings and pick a category.</p>
+
+  <p class="note">
+    Consently is a Rails gem and GitHub Pages serves static files, so the two halves
+    that normally live on the server — the helper that renders each tag blocked or live,
+    and the partial that renders the banner — are reproduced here in plain JavaScript.
+    Everything below that line is the real thing: the markup is what the gem emits,
+    the stylesheet is the gem's own, and the release logic is a port of the two Stimulus
+    controllers it ships. The vendor scripts are local stand-ins, so that agreeing on a
+    demo page does not send you to Google; whether the browser fetched one is measured,
+    not claimed.
+  </p>
+</section>
+
+<hr class="wrap">
+
+<!-- ===================== Install ===================== -->
+
+<section class="section wrap" id="install">
+  <p class="section-mark">Install</p>
+  <h2>One initializer, three helpers</h2>
+
+  <pre><code data-lang="ruby">gem "consently"</code></pre>
+
+  <pre><code data-lang="shell">bundle install
+rails g consently:install</code></pre>
+
+  <p>The generator writes the initializer and registers the two Stimulus controllers. Nothing else to set up: the banner brings its own plain CSS, so there is no Tailwind, no build step and no config file to keep in sync.</p>
+
+  <p class="filename">config/initializers/consently.rb</p>
+  <pre><code data-lang="ruby">Consently.configure do |c|
+  c.tag :google_tag_manager, id: "GTM-XXXXXXX"
+  c.tag :google_analytics,   id: "G-XXXXXXXXXX"
+  c.tag :clarity,            id: "abcd1234"
+  c.tag :meta_pixel,         id: "123456789012345"
+end</code></pre>
+
+  <p class="filename">app/views/layouts/application.html.erb</p>
+  <pre><code data-lang="erb">&lt;head&gt;
+  &lt;%= consently_tags %&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;%= consently_noscript_tags %&gt;
+  ...
+  &lt;%= consently_banner %&gt;
+&lt;/body&gt;</code></pre>
+
+  <p>That is the whole integration.</p>
+</section>
+
+<!-- ===================== Tags ===================== -->
+
+<section class="section wrap" id="tags">
+  <p class="section-mark">Tags</p>
+  <h2>What a tag is</h2>
+
+  <div class="table-scroll">
+    <table>
+      <thead><tr><th>Provider</th><th>Key</th><th>Default category</th></tr></thead>
+      <tbody>
+        <tr><td>Google Tag Manager</td><td><code>:google_tag_manager</code></td><td>analytics</td></tr>
+        <tr><td>Google Analytics 4</td><td><code>:google_analytics</code></td><td>analytics</td></tr>
+        <tr><td>Google Ads</td><td><code>:google_ads</code></td><td>marketing</td></tr>
+        <tr><td>Microsoft Clarity</td><td><code>:clarity</code></td><td>analytics</td></tr>
+        <tr><td>Meta Pixel</td><td><code>:meta_pixel</code></td><td>marketing</td></tr>
+        <tr><td>Hotjar</td><td><code>:hotjar</code></td><td>analytics</td></tr>
+        <tr><td>Plausible</td><td><code>:plausible</code></td><td>analytics</td></tr>
+        <tr><td>anything else</td><td><code>:custom</code></td><td>marketing</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p>Every tag takes <code>category:</code> to move it, and <code>:custom</code> covers vendors Consently does not know yet:</p>
+
+  <pre><code data-lang="ruby">c.tag :custom, as: :piwik, category: :analytics, src: "https://cdn.example.com/piwik.js"
+c.tag :custom, as: :inline_thing, category: :marketing, inline: "console.log('hi')"</code></pre>
+
+  <h3>Consent, and when it expires</h3>
+  <p>
+    Three categories out of the box — <code>necessary</code>, <code>analytics</code>,
+    <code>marketing</code> — and you can add your own with <code>c.category :personalization</code>.
+    <code>necessary</code> never waits for a click; everything else is blocked until the
+    visitor agrees, and the choice is kept in a <code>consently</code> cookie for six months.
+  </p>
+
+  <pre><code data-lang="ruby"># Change your policy and every older consent stops counting.
+c.consent_version = 2
+
+# Ask again on a schedule as well - the guidance across the EU converges on about a year.
+c.consent_max_age = 12.months
+
+# One consent for www and shop alike.
+c.cookie_domain = ".example.com"</code></pre>
+</section>
+
+<!-- ===================== Consent mode ===================== -->
+
+<section class="section wrap" id="consent-mode">
+  <p class="section-mark">Google</p>
+  <h2>Consent mode v2: basic or advanced</h2>
+
+  <pre><code data-lang="ruby">c.google_consent_mode = :basic    # default
+c.google_consent_mode = :advanced</code></pre>
+
+  <p>
+    <strong>Basic</strong> keeps Google's tags off the page until consent: nothing about
+    the visitor reaches Google before they agree.
+  </p>
+  <p>
+    <strong>Advanced</strong> loads them right away with everything denied, so they send
+    cookieless pings and Google Ads can model the conversions of visitors who said no.
+    More data for you, a request to Google either way. Which one is defensible is a legal
+    call, not a technical one — the gem simply does what you set.
+  </p>
+  <p>
+    Either way the defaults are emitted before any Google tag and updated the moment the
+    visitor chooses. The <em>dataLayer</em> panel above shows both, live.
+  </p>
+</section>
+
+<!-- ===================== Embeds ===================== -->
+
+<section class="section wrap" id="embeds">
+  <p class="section-mark">Embeds</p>
+  <h2>Videos and maps wait too</h2>
+
+  <p>Blocking scripts is half the job: a YouTube iframe sets cookies on its own.</p>
+
+  <pre><code data-lang="erb">&lt;%= consently_embed :youtube, "dQw4w9WgXcQ" %&gt;
+&lt;%= consently_embed :vimeo, "76979871", category: :analytics %&gt;
+&lt;%= consently_embed :google_maps, "Bahnhofstrasse 12, Berlin" %&gt;
+&lt;%= consently_embed :custom, "https://example.com/widget", title: "Widget", ratio: "4 / 3" %&gt;</code></pre>
+
+  <p>
+    Until the category is granted the visitor gets a placeholder the same size as the embed,
+    so nothing jumps, and its button opens the preferences panel — the same one the banner
+    opens, so the choice is made in one place and applies everywhere. What the page holds
+    until then is only the address:
+  </p>
+
+  <pre><code data-lang="html">&lt;div class="consently-embed"
+     data-controller="consently-embed"
+     data-consently-embed-category-value="marketing"
+     data-consently-embed-src-value="https://www.youtube-nocookie.com/embed/dQw4w9WgXcQ"&gt;</code></pre>
+
+  <p>
+    No iframe, no request to YouTube, no cookie — and <code>youtube-nocookie.com</code> is
+    what gets embedded once there is consent. <code>ratio:</code> sets the box
+    (<code>16 / 9</code> by default), <code>category:</code> decides which consent releases it,
+    and any other option is passed straight to the iframe.
+  </p>
+</section>
+
+<!-- ===================== Ecommerce ===================== -->
+
+<section class="section wrap" id="ecommerce">
+  <p class="section-mark">Ecommerce</p>
+  <h2>GA4 events from your own line items</h2>
+
+  <p>GA4 wants a particular shape, and your models are not it. Hand the helper whatever you have:</p>
+
+  <pre><code data-lang="erb">&lt;%= consently_ecommerce "purchase", items: @order.line_items,
+      value: @order.total, currency: "EUR", transaction_id: @order.number %&gt;</code></pre>
+
+  <p>
+    Items may be hashes already in GA4 shape, or any object answering to
+    <code>sku</code>/<code>id</code>, <code>name</code>, <code>price</code>,
+    <code>quantity</code>, <code>category</code>, <code>brand</code>, <code>variant</code> —
+    a line item or a product usually does. The previous <code>ecommerce</code> object is
+    cleared first, as Google asks, so two events on one page cannot bleed into each other.
+  </p>
+
+  <pre><code data-lang="erb">&lt;%= consently_data_layer_push "newsletter_signup", source: "footer" %&gt;</code></pre>
+
+  <p>Both render nothing at all when analytics consent is missing.</p>
+</section>
+
+<!-- ===================== Multi-tenant ===================== -->
+
+<section class="section wrap" id="scopes">
+  <p class="section-mark">Multi-tenant</p>
+  <h2>Different tags per domain or shop</h2>
+
+  <pre><code data-lang="ruby">c.scope_resolver = -> (request) { request.host }
+
+c.scope "shop.example.com" do |s|
+  s.tag :google_analytics, id: "G-SHOP00001"
+end
+
+c.scope "blog.example.com" do |s|
+  s.tag :google_analytics, id: "G-BLOG00001"
+end</code></pre>
+
+  <p>
+    Scopes inherit the tags declared outside them and override by declaring the same
+    provider again. The resolver can return anything — <code>Current.shop&amp;.name</code>
+    works just as well as a host.
+  </p>
+</section>
+
+<!-- ===================== Policy ===================== -->
+
+<section class="section wrap" id="policy">
+  <p class="section-mark">Cookie policy</p>
+  <h2>It writes itself</h2>
+
+  <pre><code data-lang="erb">&lt;h1&gt;Cookie policy&lt;/h1&gt;
+&lt;p&gt;Your own legal text.&lt;/p&gt;
+
+&lt;%= consently_policy %&gt;</code></pre>
+
+  <p>
+    Every category, the vendors in it, the cookies each one sets and how long they last —
+    rendered from the configuration your tags come from, so it cannot drift out of date.
+    Add a tag to the initializer and it appears here, in the right category, with its
+    cookies. The panel above shows it for this page's four tags, in whichever language
+    you picked.
+  </p>
+
+  <div class="shots">
+    <figure>
+      <img src="policy.png" alt="The generated cookie policy: categories, vendors, cookies and durations" loading="lazy">
+      <figcaption>The generated policy in the dummy application.</figcaption>
+    </figure>
+    <figure>
+      <img src="preferences.png" alt="The preferences panel with a checkbox per category" loading="lazy">
+      <figcaption>The preferences panel, one category at a time.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- ===================== Proof ===================== -->
+
+<section class="section wrap" id="proof">
+  <p class="section-mark">Proof of consent</p>
+  <h2>A log in your own database</h2>
+
+  <pre><code data-lang="shell">rails g consently:consent_log
+rails db:migrate</code></pre>
+
+  <pre><code data-lang="ruby">mount Consently::Engine => "/consently"   # config/routes.rb
+
+c.log_consents = true                     # the initializer</code></pre>
+
+  <p>
+    Each decision is then stored as a <code>Consently::ConsentRecord</code>: the categories,
+    the policy version, the scope, the user agent, and a salted digest of the IP — enough
+    to show a decision was made, not enough to identify anyone.
+  </p>
+  <p>
+    The cookie is still what decides which tags run; the table is only the proof, since a
+    visitor can clear their cookies and a log that lives in their browser proves nothing.
+    Nobody is named unless you say who they are:
+  </p>
+
+  <pre><code data-lang="ruby">c.consent_subject = -> (request) { request.env["warden"]&.user&.id }</code></pre>
+</section>
+
+<!-- ===================== Who gets asked ===================== -->
+
+<section class="section wrap" id="who">
+  <p class="section-mark">Who gets asked</p>
+  <h2>Everyone, unless you say otherwise</h2>
+
+  <pre><code data-lang="ruby">c.consent_required = -> (request) { EU_COUNTRIES.include?(request.headers["CF-IPCountry"]) }</code></pre>
+
+  <p>
+    For anyone that returns false there is no banner, and every category counts as granted.
+  </p>
+  <p>
+    Opt-out signals are answers, so those visitors are never asked either. Global Privacy
+    Control — binding in California and Colorado — is honoured out of the box. Do Not Track
+    is advisory, so it is opt-in: <code>c.respect_do_not_track = true</code>.
+  </p>
+
+  <h3>After a choice</h3>
+  <p>
+    Nothing reloads: the tags the visitor just agreed to start running in place, and the
+    page keeps its scroll position and its state. If your page renders something the server
+    decides from consent, ask for a reload instead with <code>c.reload_after_choice = true</code>.
+    Either way an event fires:
+  </p>
+
+  <pre><code data-lang="js">document.addEventListener("consently:change", ({ detail }) => {
+  console.log(detail.categories) // ["analytics"]
+})</code></pre>
+
+  <h3>Accessibility</h3>
+  <p>
+    The card is a non-modal <code>role="dialog"</code> labelled by its own text, the settings
+    button carries <code>aria-expanded</code> and <code>aria-controls</code>, reopening the
+    panel moves focus into it, and the animation gives way to
+    <code>prefers-reduced-motion</code>. Nobody is trapped in a focus cycle they did not ask for.
+  </p>
+
+  <h3>Styling</h3>
+  <p>
+    The banner ships as plain CSS scoped under <code>.consently</code>, driven by custom
+    properties — the two controls at the top of the demo change nothing but these:
+  </p>
+
+  <pre><code data-lang="js">:root {
+  --consently-accent: #4f46e5;
+  --consently-accent-text: #ffffff;
+  --consently-radius: 0;
+  --consently-max-width: 28rem;
+}</code></pre>
+
+  <p>
+    They live on <code>:root</code> rather than on <code>.consently</code>: a blocked embed
+    sits somewhere else on the page and its button wears the same classes, so variables
+    scoped to the banner would never reach it.
+  </p>
+
+  <p>
+    Want the markup instead? <code>rails g consently:views</code> takes the partials over, and
+    <code>c.stylesheet = false</code> stops the gem's CSS from loading. Translations live under
+    the <code>consently.*</code> keys, and your own locale files win over the gem's, so
+    overriding one string means writing that one key.
+  </p>
+
+  <h3>Turbo</h3>
+  <p>
+    The banner is <code>data-turbo-permanent</code>, so it survives Turbo Drive navigation and
+    morphed refreshes. Tags blocked at first render stay blocked across visits until consent is
+    given, and are rendered live from the server on the next request after that.
+  </p>
+</section>
+
+<!-- ===================== Cheat sheet ===================== -->
+
+<section class="section wrap" id="cheat-sheet">
+  <p class="section-mark">Cheat sheet</p>
+  <h2>Helpers</h2>
+
+  <div class="table-scroll">
+    <table>
+      <tbody>
+        <tr><td><code>consently_tags</code></td><td>in <code>&lt;head&gt;</code>: the stylesheet, consent mode defaults, and every tag (blocked or live)</td></tr>
+        <tr><td><code>consently_noscript_tags</code></td><td>after <code>&lt;body&gt;</code>: GTM and Meta fallbacks, for granted categories only</td></tr>
+        <tr><td><code>consently_banner</code></td><td>the banner, the panel, and the JavaScript that releases blocked tags</td></tr>
+        <tr><td><code>consently_policy</code></td><td>the generated cookie policy: categories, vendors, cookies, durations</td></tr>
+        <tr><td><code>consently_preferences_link</code></td><td>“Cookie settings” link; anything with <code>data-consently-open</code> reopens the panel</td></tr>
+        <tr><td><code>consently_ecommerce(event, items:, **params)</code></td><td>a GA4 ecommerce event, items mapped from your own objects</td></tr>
+        <tr><td><code>consently_data_layer_push(event, **payload)</code></td><td>any other dataLayer event, rendered only with analytics consent</td></tr>
+        <tr><td><code>consently_embed(kind, id, category:, ratio:)</code></td><td>a video or map that waits for consent</td></tr>
+        <tr><td><code>consently_consent</code></td><td>the current consent; <code>granted?(:analytics)</code> in your own views</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>Configuration</h2>
+
+  <div class="table-scroll">
+    <table>
+      <tbody>
+        <tr><td><code>c.tag key, **options</code></td><td><code>id:</code>, <code>domain:</code>, <code>category:</code>, <code>as:</code> (name it, for two of a kind)</td></tr>
+        <tr><td><code>c.scope(name) { |s| ... }</code></td><td>tags for one tenant; <code>c.scope_resolver</code> decides which one a request is</td></tr>
+        <tr><td><code>c.category :name</code></td><td>a category of your own beside the three built-in ones</td></tr>
+        <tr><td><code>c.consent_version</code></td><td>bump it and every older consent stops counting</td></tr>
+        <tr><td><code>c.enabled</code></td><td><code>true</code>, <code>false</code>, or a callable taking the request</td></tr>
+        <tr><td><code>c.reload_after_choice</code></td><td>reload once a choice is made; off by default</td></tr>
+        <tr><td><code>c.google_consent_mode</code></td><td><code>:basic</code> (default), <code>:advanced</code>, or <code>false</code></td></tr>
+        <tr><td><code>c.log_consents</code>, <code>c.consent_subject</code></td><td>store proof of each decision, optionally naming who</td></tr>
+        <tr><td><code>c.stylesheet</code></td><td>link the banner's CSS; off if you style it yourself</td></tr>
+        <tr><td><code>c.cookie_name</code>, <code>c.cookie_max_age</code>, <code>c.cookie_path</code>, <code>c.cookie_domain</code></td><td>where the choice is kept</td></tr>
+        <tr><td><code>c.consent_max_age</code></td><td>ask again after this long, whatever the cookie says</td></tr>
+        <tr><td><code>c.respect_do_not_track</code>, <code>c.respect_global_privacy_control</code></td><td>treat an opt-out signal as a rejection</td></tr>
+        <tr><td><code>c.consent_required</code></td><td>who has to be asked at all; false means no banner and everything granted</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<footer class="wrap">
+  <p>
+    Consently 0.2.0 — MIT. Built by
+    <a href="https://github.com/Xeross99">Michał Krzysteczko</a>.
+    <a href="https://rubygems.org/gems/consently">RubyGems</a> ·
+    <a href="https://github.com/Xeross99/consently">Source</a> ·
+    <a href="#consently" data-consently-open>Cookie settings</a>
+  </p>
+  <p>
+    This page sets no third-party cookies and makes no third-party requests until you
+    agree to one — which, on this page, means a local stand-in for the vendor and, for
+    marketing, the YouTube embed you released yourself.
+  </p>
+</footer>
+
+<!-- Where the server would have put the tags. Blocked ones sit here inert. -->
+<div id="demo-tags" hidden></div>
+<div id="demo-banner"></div>
+
+<script src="assets/demo.js"></script>
+</body>
+</html>

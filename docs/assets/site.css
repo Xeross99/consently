@@ -1,0 +1,339 @@
+/*
+ * The page around the demo. The banner itself is styled by the gem's own
+ * stylesheet (assets/consently.css), copied here unchanged - so what you see
+ * at the bottom of this page is what your application would render.
+ */
+
+:root {
+  color-scheme: light;
+
+  --paper: #fbfaf8;
+  --paper-sunk: #f4f1ec;
+  --ink: #17140f;
+  --muted: #6b6459;
+  --rule: rgba(23, 20, 15, 0.12);
+  --accent: #e9573f;
+  --green: #15803d;
+  --green-soft: rgba(21, 128, 61, 0.1);
+  --red-soft: rgba(233, 87, 63, 0.1);
+
+  --measure: 42rem;
+  --wide: 62rem;
+
+  --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Helvetica, Arial, sans-serif;
+  --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  padding: 0 1.5rem 8rem;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 1rem;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* One column for everything, so every section shares a left edge. Prose is
+   held to a readable measure inside it; tables and screenshots may use it all. */
+.wrap, .wrap--wide { max-width: var(--wide); margin-inline: auto; }
+
+.wrap > p,
+.wrap > h1,
+.wrap > h2,
+.wrap > h3,
+.wrap > pre,
+.wrap > ul { max-width: var(--measure); }
+
+.note, footer p { max-width: var(--measure); }
+
+h1, h2, h3 { line-height: 1.2; letter-spacing: -0.02em; font-weight: 650; }
+h2 { font-size: 1.65rem; margin: 0 0 0.75rem; }
+h3 { font-size: 1.1rem; margin: 2rem 0 0.5rem; }
+p { margin: 0 0 1rem; }
+a { color: var(--ink); text-decoration-color: var(--rule); text-underline-offset: 0.2em; }
+a:hover { text-decoration-color: var(--accent); }
+
+hr { border: 0; border-top: 1px solid var(--rule); margin: 4.5rem 0; }
+
+/* Masthead ---------------------------------------------------------------- */
+
+.masthead { padding: 5rem 0 1rem; }
+
+.eyebrow {
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 0 0 1.25rem;
+}
+
+.eyebrow strong { color: var(--accent); font-weight: 600; }
+
+.masthead h1 {
+  font-size: clamp(2rem, 6vw, 3rem);
+  margin: 0 0 1.25rem;
+  max-width: 20ch;
+}
+
+.lede { font-size: 1.125rem; color: var(--muted); max-width: 34rem; }
+.lede strong { color: var(--ink); font-weight: 600; }
+
+.links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.25rem;
+  margin-top: 2rem;
+  font-size: 0.9rem;
+}
+
+.links a { display: inline-flex; align-items: center; gap: 0.4rem; }
+
+/* Section headers --------------------------------------------------------- */
+
+.section { margin-top: 4.5rem; }
+.section > .wrap > p:last-child, .section > p:last-child { margin-bottom: 0; }
+
+.section-mark {
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin: 0 0 0.5rem;
+}
+
+.note {
+  font-size: 0.875rem;
+  color: var(--muted);
+  border-left: 2px solid var(--rule);
+  padding-left: 1rem;
+  margin: 1.5rem 0;
+}
+
+/* Code -------------------------------------------------------------------- */
+
+pre {
+  margin: 1.25rem 0;
+  padding: 1.1rem 1.25rem;
+  overflow-x: auto;
+  background: #fff;
+  border: 1px solid var(--rule);
+  border-radius: 0.6rem;
+  font-size: 0.83rem;
+  line-height: 1.6;
+  tab-size: 2;
+}
+
+code { font-family: var(--mono); font-size: 0.875em; }
+p code, li code, td code { background: var(--paper-sunk); padding: 0.1em 0.35em; border-radius: 0.25rem; }
+pre code { background: none; padding: 0; font-size: inherit; }
+
+.tok-comment { color: #93897a; font-style: italic; }
+.tok-string { color: #1f7a5c; }
+.tok-symbol { color: var(--accent); }
+.tok-keyword { color: #6d28d9; }
+.tok-tag { color: #9a6b3f; }
+
+.filename {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 1.75rem 0 -0.75rem;
+}
+
+/* Tables ------------------------------------------------------------------ */
+
+.table-scroll { overflow-x: auto; margin: 1.5rem 0; }
+
+table { border-collapse: collapse; width: 100%; font-size: 0.9rem; }
+th, td { text-align: left; padding: 0.5rem 1rem 0.5rem 0; border-bottom: 1px solid var(--rule); vertical-align: top; }
+th { font-weight: 600; color: var(--muted); font-size: 0.78rem; letter-spacing: 0.04em; text-transform: uppercase; }
+
+/* The demo ---------------------------------------------------------------- */
+
+.demo { margin-top: 4rem; }
+
+.demo-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 1.5rem;
+  padding: 0.9rem 1.1rem;
+  margin-bottom: 1.25rem;
+  background: var(--paper-sunk);
+  border-radius: 0.6rem;
+  font-size: 0.85rem;
+}
+
+.demo-bar label { display: inline-flex; align-items: center; gap: 0.5rem; color: var(--muted); }
+
+.demo-bar select,
+.demo-bar input[type="color"] {
+  font: inherit;
+  font-size: 0.85rem;
+  padding: 0.2rem 0.35rem;
+  border: 1px solid var(--rule);
+  border-radius: 0.35rem;
+  background: #fff;
+  color: var(--ink);
+}
+
+.demo-bar input[type="color"] { padding: 0; width: 2rem; height: 1.6rem; }
+
+.button {
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 0.3rem 0.75rem;
+  border: 1px solid var(--rule);
+  border-radius: 0.35rem;
+  background: #fff;
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.button:hover { border-color: var(--accent); color: var(--accent); }
+
+.state {
+  margin-inline-start: auto;
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+
+.panels {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr));
+  gap: 1.25rem;
+}
+
+.panel {
+  background: #fff;
+  border: 1px solid var(--rule);
+  border-radius: 0.6rem;
+  padding: 1.1rem 1.25rem 1.25rem;
+  min-width: 0;
+}
+
+.panel--full { grid-column: 1 / -1; }
+
+.panel h3 {
+  margin: 0;
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.panel h3 span { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0; text-transform: none; }
+
+.panel p { font-size: 0.85rem; color: var(--muted); margin: 0.5rem 0 0; }
+
+.panel pre {
+  border: 0;
+  background: var(--paper-sunk);
+  margin: 0.85rem 0 0;
+  font-size: 0.75rem;
+  max-height: 22rem;
+  overflow: auto;
+}
+
+/* The generated policy is long by nature - let it scroll inside its panel
+   rather than stretching the whole row. */
+#demo-policy { max-height: 26rem; overflow: auto; margin-top: 0.5rem; }
+
+.panel table { margin-top: 0.75rem; font-size: 0.83rem; }
+.panel th, .panel td { padding: 0.35rem 0.75rem 0.35rem 0; }
+.panel td:last-child, .panel th:last-child { padding-right: 0; text-align: right; }
+
+.pill {
+  display: inline-block;
+  padding: 0.05rem 0.5rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  font-family: var(--mono);
+  white-space: nowrap;
+}
+
+.pill--blocked { background: var(--red-soft); color: var(--accent); }
+.pill--running { background: var(--green-soft); color: var(--green); }
+
+.empty { font-family: var(--mono); font-size: 0.78rem; color: var(--muted); margin-top: 0.85rem; }
+
+.hint {
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin: 1.25rem 0 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.hint::before {
+  content: "";
+  flex: none;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 999px;
+  background: var(--accent);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse { 50% { opacity: 0.25; } }
+
+@media (prefers-reduced-motion: reduce) { .hint::before { animation: none; } }
+
+/* Screenshots ------------------------------------------------------------- */
+
+.shots {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
+  gap: 1.25rem;
+  margin: 1.75rem 0;
+}
+
+.shots figure { margin: 0; }
+.shots img { width: 100%; height: auto; border: 1px solid var(--rule); border-radius: 0.6rem; display: block; }
+.shots figcaption { font-size: 0.8rem; color: var(--muted); margin-top: 0.5rem; }
+
+/* Policy example ---------------------------------------------------------- */
+
+.policy-frame {
+  background: #fff;
+  border: 1px solid var(--rule);
+  border-radius: 0.6rem;
+  padding: 0.5rem 1.5rem 1.5rem;
+  margin: 1.5rem 0;
+}
+
+.policy-frame .consently-policy__category:first-of-type { margin-top: 1.5rem; }
+
+/* Footer ------------------------------------------------------------------ */
+
+footer {
+  margin-top: 5rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--rule);
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+footer a { color: var(--muted); }
+
+/* Room for the banner, which is fixed to the bottom of the viewport. */
+@media (max-width: 40rem) {
+  body { padding-bottom: 16rem; }
+}

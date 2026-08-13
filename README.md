@@ -13,6 +13,9 @@ an inert `<script type="text/plain">` the browser will not even fetch, and
 becomes a live script the instant the visitor agrees - no page reload, no lost
 pageview.
 
+**[Try it in your browser](https://xeross99.github.io/consently/)** - four tags
+blocked on a live page, and what happens to them the moment you click.
+
 | | |
 | --- | --- |
 | **Blocks** | GA4, Google Tag Manager, Google Ads, Microsoft Clarity, Meta Pixel, Hotjar, Plausible, anything custom |
