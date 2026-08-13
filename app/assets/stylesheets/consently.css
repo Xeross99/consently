@@ -2,14 +2,18 @@
  * The banner's own styles. Plain CSS on purpose: a gem that only works if the
  * host application runs Tailwind is half a gem.
  *
- * Everything is scoped under .consently and driven by custom properties, so
- * restyling means overriding a handful of variables rather than forking the
- * markup:
+ * Every rule is scoped under .consently, .consently-embed or .consently-policy
+ * and driven by custom properties, so restyling means overriding a handful of
+ * variables rather than forking the markup:
  *
- *   .consently { --consently-accent: #4f46e5; --consently-radius: 0; }
+ *   :root { --consently-accent: #4f46e5; --consently-radius: 0; }
+ *
+ * The defaults live on :root rather than on .consently because a blocked embed
+ * is somewhere else on the page entirely, and its button wears the same
+ * classes: scoped to the banner, those variables would not reach it.
  */
 
-.consently {
+:root {
   --consently-background: #ffffff;
   --consently-text: #111827;
   --consently-muted: #4b5563;
@@ -19,7 +23,9 @@
   --consently-radius: 0.75rem;
   --consently-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
   --consently-max-width: 36rem;
+}
 
+.consently {
   position: fixed;
   inset-inline: 0;
   bottom: 0;

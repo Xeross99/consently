@@ -319,17 +319,22 @@ moment the visitor chooses.
 
 ## Styling
 
-The banner ships as plain CSS scoped under `.consently`, driven by custom
-properties. Most restyling is a few variables in your own stylesheet:
+The banner ships as plain CSS, driven by custom properties. Most restyling is a
+few variables in your own stylesheet:
 
 ```css
-.consently {
+:root {
   --consently-accent: #4f46e5;
   --consently-accent-text: #ffffff;
   --consently-radius: 0;
   --consently-max-width: 28rem;
 }
 ```
+
+The defaults live on `:root`, not on `.consently`: a blocked embed sits
+somewhere else on the page and its button wears the same classes, so variables
+scoped to the banner would never reach it. Scope them tighter if you mean to,
+`.consently` included - it is your stylesheet.
 
 Want the markup instead? Take the partial over, and turn the gem's stylesheet
 off so it stops loading:
