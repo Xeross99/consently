@@ -110,12 +110,12 @@ One initializer, different tags per host or shop:
 ```ruby
 c.scope_resolver = -> (request) { request.host }
 
-c.scope "trixbrix.eu" do |s|
-  s.tag :google_analytics, id: "G-TRIX"
+c.scope "shop.example.com" do |s|
+  s.tag :google_analytics, id: "G-SHOP00001"
 end
 
-c.scope "pixelpicture.eu" do |s|
-  s.tag :google_analytics, id: "G-PIXEL"
+c.scope "blog.example.com" do |s|
+  s.tag :google_analytics, id: "G-BLOG00001"
 end
 ```
 
