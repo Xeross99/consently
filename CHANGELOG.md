@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.2.1 (2026-08-13)
+
+- The banner's custom properties moved from `.consently` to `:root`, so the
+  button on a blocked embed - which lives elsewhere on the page and wears the
+  same classes - is styled like the one in the banner instead of losing its
+  background. Overriding them on `.consently` still themes the banner.
+- The cookie policy pluralises durations, so a one-day cookie no longer reads
+  "1 days"; the Slavic locales carry the full set of forms.
+- A page anybody can open: <https://xeross99.github.io/consently/> runs four
+  tags blocked in the browser, and shows what happens to them - and to the
+  requests, the cookies and the dataLayer - the moment consent is given.
+
 ## 0.2.0 (2026-08-13)
 
 - `consently_embed` for videos and maps: a YouTube or Vimeo iframe, or a
