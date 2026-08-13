@@ -18,6 +18,7 @@ pageview.
 | **Blocks** | GA4, Google Tag Manager, Google Ads, Microsoft Clarity, Meta Pixel, Hotjar, Plausible, anything custom |
 | **Google Consent Mode v2** | denied by default before any Google tag, updated on the click |
 | **Banner** | plain CSS, no Tailwind, no build step, one Stimulus controller, ten languages |
+| **Embeds** | YouTube, Vimeo and Google Maps iframes wait behind a placeholder too |
 | **Cookie policy** | generated from the same config - every vendor, every cookie, every duration |
 | **Multi-tenant** | different tags per domain or shop from one initializer |
 | **Proof of consent** | optional log in your own database; no third-party service, nothing leaves your servers |
@@ -269,8 +270,33 @@ Blocking scripts is half the job: a YouTube iframe sets cookies on its own.
 
 Until the category is granted the visitor gets a placeholder the same size as
 the embed - so nothing jumps - with a button that opens the preferences panel.
-The iframe appears the moment they agree, without a reload. YouTube is embedded
-through `youtube-nocookie.com`.
+The iframe appears the moment they agree, without a reload.
+
+| Waiting for consent | After the click |
+| --- | --- |
+| ![A placeholder where the video will be](docs/embed-blocked.png) | ![The same box, now playing the video](docs/embed-released.png) |
+
+What the page holds until then is only the address:
+
+```html
+<div class="consently-embed"
+     data-controller="consently-embed"
+     data-consently-embed-category-value="marketing"
+     data-consently-embed-src-value="https://www.youtube-nocookie.com/embed/dQw4w9WgXcQ">
+```
+
+No iframe, no request to YouTube, no cookie - and `youtube-nocookie.com` is
+what gets embedded once there is consent. `ratio:` sets the box (`16 / 9` by
+default), `category:` decides which consent releases it, and any other option
+is passed straight to the iframe:
+
+```erb
+<%= consently_embed :youtube, "dQw4w9WgXcQ", ratio: "21 / 9", allow: "autoplay; picture-in-picture" %>
+```
+
+Your own markup can do the same thing without the helper: anything carrying
+`data-consently-open` opens the preferences panel, and the `consently:change`
+event tells you what was granted.
 
 ## Google consent mode: basic or advanced
 
