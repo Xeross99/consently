@@ -17,8 +17,9 @@ pageview.
 | --- | --- |
 | **Blocks** | GA4, Google Tag Manager, Google Ads, Microsoft Clarity, Meta Pixel, Hotjar, Plausible, anything custom |
 | **Google Consent Mode v2** | denied by default before any Google tag, updated on the click |
-| **Banner** | plain CSS, no Tailwind, no build step, one Stimulus controller, ten languages |
+| **Banner** | plain CSS, no Tailwind, no build step, ten languages |
 | **Embeds** | YouTube, Vimeo and Google Maps iframes wait behind a placeholder too |
+| **Ecommerce** | GA4 `purchase`, `add_to_cart` and friends, built from your own line items |
 | **Cookie policy** | generated from the same config - every vendor, every cookie, every duration |
 | **Multi-tenant** | different tags per domain or shop from one initializer |
 | **Proof of consent** | optional log in your own database; no third-party service, nothing leaves your servers |
@@ -70,10 +71,10 @@ rails g consently:install
 
 On RubyGems: <https://rubygems.org/gems/consently>
 
-The generator writes the initializer and registers the Stimulus controller in
-`app/javascript/controllers/index.js`. Nothing else to set up: the banner
-brings its own plain CSS, so there is no Tailwind, no build step and no
-config file to keep in sync.
+The generator writes the initializer and registers the two Stimulus controllers
+in `app/javascript/controllers/index.js`. Nothing else to set up: the banner
+brings its own plain CSS, so there is no Tailwind, no build step and no config
+file to keep in sync.
 
 ## What is a tag
 

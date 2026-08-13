@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.2.0 (unreleased)
+## 0.2.0 (2026-08-13)
 
 - `consently_embed` for videos and maps: a YouTube or Vimeo iframe, or a
   Google map, waits behind a placeholder until its category is granted and
