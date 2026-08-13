@@ -23,7 +23,11 @@ pl:
       no_cookies: "Nie ustawia ciasteczek."
       cookie_name: "Ciasteczko"
       cookie_duration: "Przechowywane"
-      duration_days: "%{count} dni"
+      duration_days:
+        one: "%{count} dzień"
+        few: "%{count} dni"
+        many: "%{count} dni"
+        other: "%{count} dni"
       duration_session: "do zamknięcia przeglądarki"
       own_heading: "Samo ciasteczko zgody"
       own_body: "Twój wybór trzymamy w jednym ciasteczku w Twojej przeglądarce: kategorie, na które się zgodziłeś, wersja tej polityki i czas. Nic o Tobie."

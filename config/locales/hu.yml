@@ -23,7 +23,9 @@ hu:
       no_cookies: "Nem helyez el sütit."
       cookie_name: "Süti"
       cookie_duration: "Megőrzés"
-      duration_days: "%{count} nap"
+      duration_days:
+        one: "%{count} nap"
+        other: "%{count} nap"
       duration_session: "a böngésző bezárásáig"
       own_heading: "Maga a hozzájárulási süti"
       own_body: "A választásod egyetlen sütiben van a böngésződben: az elfogadott kategóriák, e szabályzat verziója és az idő. Rólad semmi."

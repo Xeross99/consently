@@ -23,7 +23,9 @@ it:
       no_cookies: "Non imposta cookie."
       cookie_name: "Cookie"
       cookie_duration: "Conservato"
-      duration_days: "%{count} giorni"
+      duration_days:
+        one: "%{count} giorno"
+        other: "%{count} giorni"
       duration_session: "fino alla chiusura del browser"
       own_heading: "Il cookie di consenso"
       own_body: "La tua scelta sta in un cookie nel tuo browser: le categorie accettate, la versione di questa policy e l'ora. Nulla su di te."

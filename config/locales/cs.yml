@@ -23,7 +23,11 @@ cs:
       no_cookies: "Nenastavuje žádné cookies."
       cookie_name: "Cookie"
       cookie_duration: "Doba uložení"
-      duration_days: "%{count} dní"
+      duration_days:
+        one: "%{count} den"
+        few: "%{count} dny"
+        many: "%{count} dne"
+        other: "%{count} dní"
       duration_session: "do zavření prohlížeče"
       own_heading: "Samotná cookie se souhlasem"
       own_body: "Vaše volba je uložená v jedné cookie ve vašem prohlížeči: kategorie, se kterými jste souhlasili, verze těchto zásad a čas. Nic o vás."

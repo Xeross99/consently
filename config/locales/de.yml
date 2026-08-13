@@ -23,7 +23,9 @@ de:
       no_cookies: "Setzt keine Cookies."
       cookie_name: "Cookie"
       cookie_duration: "Speicherdauer"
-      duration_days: "%{count} Tage"
+      duration_days:
+        one: "%{count} Tag"
+        other: "%{count} Tage"
       duration_session: "bis zum Schließen des Browsers"
       own_heading: "Das Einwilligungs-Cookie selbst"
       own_body: "Ihre Wahl liegt in einem Cookie in Ihrem Browser: die Kategorien, denen Sie zugestimmt haben, die Version dieser Richtlinie und die Uhrzeit. Nichts über Sie."

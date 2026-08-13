@@ -23,7 +23,9 @@ en:
       no_cookies: "Sets no cookies."
       cookie_name: "Cookie"
       cookie_duration: "Kept for"
-      duration_days: "%{count} days"
+      duration_days:
+        one: "%{count} day"
+        other: "%{count} days"
       duration_session: "until you close the browser"
       own_heading: "The consent cookie itself"
       own_body: "Your choice is kept in one cookie in your browser: the categories you agreed to, the version of this policy and the time. Nothing about you."

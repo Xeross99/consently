@@ -23,7 +23,9 @@ es:
       no_cookies: "No instala cookies."
       cookie_name: "Cookie"
       cookie_duration: "Se conserva"
-      duration_days: "%{count} días"
+      duration_days:
+        one: "%{count} día"
+        other: "%{count} días"
       duration_session: "hasta que cierres el navegador"
       own_heading: "La propia cookie de consentimiento"
       own_body: "Tu elección se guarda en una cookie de tu navegador: las categorías que aceptaste, la versión de esta política y la hora. Nada sobre ti."

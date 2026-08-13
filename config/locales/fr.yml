@@ -23,7 +23,9 @@ fr:
       no_cookies: "Ne dépose aucun cookie."
       cookie_name: "Cookie"
       cookie_duration: "Conservé"
-      duration_days: "%{count} jours"
+      duration_days:
+        one: "%{count} jour"
+        other: "%{count} jours"
       duration_session: "jusqu'à la fermeture du navigateur"
       own_heading: "Le cookie de consentement lui-même"
       own_body: "Votre choix tient dans un cookie de votre navigateur : les catégories acceptées, la version de cette politique et l'heure. Rien sur vous."

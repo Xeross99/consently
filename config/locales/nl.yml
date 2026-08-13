@@ -23,7 +23,9 @@ nl:
       no_cookies: "Plaatst geen cookies."
       cookie_name: "Cookie"
       cookie_duration: "Bewaard"
-      duration_days: "%{count} dagen"
+      duration_days:
+        one: "%{count} dag"
+        other: "%{count} dagen"
       duration_session: "tot je de browser sluit"
       own_heading: "De toestemmingscookie zelf"
       own_body: "Je keuze staat in één cookie in je browser: de categorieën die je toestond, de versie van dit beleid en het tijdstip. Niets over jou."
