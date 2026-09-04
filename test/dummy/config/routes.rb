@@ -7,5 +7,7 @@ Rails.application.routes.draw do
   get "cookies" => "pages#cookie_policy", as: :cookie_policy
   get "page" => "pages#show"
   get "checkout" => "pages#checkout"
+  get "cart" => "pages#cart"
+  post "cart" => "pages#add_to_cart", as: :add_to_cart
   get "embeds" => "pages#embeds"
 end

@@ -26,6 +26,19 @@ class PagesController < ApplicationController
   # Stands in for a thank-you page: the ecommerce helper fed with objects that
   # are not hashes, which is the case the shape mapping exists for.
   def checkout
-    @items = [ EcommerceTest::LineItem.new(sku: "TB-001", name: "Straight track", price: 12.45, quantity: 2, category: "Track") ]
+    @items = [ LineItem.new(sku: "TB-001", name: "Straight track", price: 12.45, quantity: 2, category: "Track") ]
+  end
+
+  # A cart page and the add-to-cart that answers with a Turbo Stream instead
+  # of a page - where consently_stream_event is the only way to send the event.
+  def cart
+  end
+
+  def add_to_cart
+    @items = [ LineItem.new(sku: "TB-002", name: "Curved track", price: 14.9, quantity: 1, category: "Track") ]
+
+    respond_to do |format|
+      format.turbo_stream
+    end
   end
 end

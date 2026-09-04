@@ -19,6 +19,8 @@ gem "propshaft"
 # application needs the real setup rather than a stand-in.
 gem "importmap-rails"
 gem "stimulus-rails"
+# The Turbo Stream action is only worth testing against Turbo itself.
+gem "turbo-rails"
 
 # System tests: the blocking only matters if it is exercised in a browser.
 gem "capybara"

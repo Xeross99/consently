@@ -50,6 +50,21 @@ module Consently
       google_consent_mode == :advanced
     end
 
+    # How events are sent: :gtag for a page running gtag.js, :data_layer for
+    # one running Google Tag Manager. The default, :auto, decides per request
+    # from the tags in its scope (see Consently.event_transport_for) and is
+    # right unless you push to a container the gem does not know about.
+    attr_reader :event_transport
+
+    def event_transport=(transport)
+      transport = transport&.to_sym
+      unless [ :auto, *Event::TRANSPORTS ].include?(transport)
+        raise ArgumentError, "event_transport must be :auto, :gtag or :data_layer"
+      end
+
+      @event_transport = transport
+    end
+
     # Store a row per decision, as proof of consent. Needs the engine mounted
     # and the migration from `rails g consently:consent_log`.
     attr_accessor :log_consents
@@ -109,6 +124,7 @@ module Consently
       @consent_version = 1
       @enabled = true
       @google_consent_mode = :basic
+      @event_transport = :auto
       @stylesheet = true
       @log_consents = false
       @respect_do_not_track = false

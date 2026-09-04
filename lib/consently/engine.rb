@@ -14,7 +14,7 @@ module Consently
       if app.config.respond_to?(:assets)
         app.config.assets.paths << root.join("app/javascript")
         if app.config.assets.respond_to?(:precompile)
-          app.config.assets.precompile += %w[consently.css consently/banner_controller.js consently/embed_controller.js]
+          app.config.assets.precompile += %w[consently.css consently/banner_controller.js consently/embed_controller.js consently/events.js]
         end
       end
     end

@@ -7,6 +7,7 @@ require "consently/version"
 require "consently/script"
 require "consently/cookie"
 require "consently/consent"
+require "consently/event"
 require "consently/providers/base"
 require "consently/providers"
 require "consently/configuration"
@@ -58,6 +59,20 @@ module Consently
 
     def enabled?(request = nil)
       resolve(config.enabled, request)
+    end
+
+    # How events reach Google for this request. Google Tag Manager reads
+    # dataLayer pushes; gtag.js only acts on gtag('event', ...) calls, and a
+    # push meant for a container it silently ignores. :auto looks at the tags
+    # in the request's scope: a container present means the dataLayer,
+    # otherwise any Google tag means gtag.
+    def event_transport_for(request = nil)
+      return config.event_transport unless config.event_transport == :auto
+
+      providers = tags_for(request)
+      return :data_layer if providers.any? { |provider| provider.is_a?(Providers::GoogleTagManager) }
+
+      providers.any?(&:google?) ? :gtag : :data_layer
     end
 
     # Whether this visitor has to be asked. When they do not, every category

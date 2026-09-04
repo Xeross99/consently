@@ -1,4 +1,7 @@
 import { Controller } from "@hotwired/stimulus"
+// Loaded for its side effects: the event queue, the Turbo Stream action and
+// window.Consently.track come along with the banner.
+import "consently/events"
 
 // The banner, the preferences panel, and the part that actually matters:
 // turning the blocked <script type="text/plain"> tags into live ones the

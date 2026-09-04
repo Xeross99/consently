@@ -9,7 +9,7 @@ module Consently
     def consently_tags
       return "".html_safe unless consently_enabled?
 
-      parts = []
+      parts = [ consently_state_tags ]
       parts << consently_stylesheet_tag if Consently.config.stylesheet
       parts << consently_consent_mode_tag if Consently.config.google_consent_mode
       Consently.tags_for(request).each do |provider|
@@ -75,16 +75,20 @@ module Consently
       end
     end
 
-    # Push an event onto the dataLayer from a view, respecting consent: with
-    # no analytics consent the event is simply not emitted.
+    # An analytics event from a view, sent the way this page's tags expect -
+    # gtag('event', ...) under gtag.js, a dataLayer push under Google Tag
+    # Manager (see Consently.event_transport_for) - and only with consent.
+    # Without it the event is held back the way a tag is: an inert script
+    # the banner releases the moment the category is granted, so the page a
+    # visitor accepts on still counts.
     #
-    #   <%= consently_data_layer_push("newsletter_signup", source: "footer") %>
-    def consently_data_layer_push(event, category: :analytics, **payload)
-      return "".html_safe unless consently_enabled? && consently_consent.granted?(category)
-
-      payload = payload.merge(event: event)
-      consently_inline_script "window.dataLayer = window.dataLayer || []; window.dataLayer.push(#{payload.to_json});"
+    #   <%= consently_event("newsletter_signup", source: "footer") %>
+    def consently_event(event, category: :analytics, **payload)
+      consently_event_tag(Event.new(event, payload), category)
     end
+
+    # The name this helper had before it learnt to speak gtag.
+    alias_method :consently_data_layer_push, :consently_event
 
     # A GA4 ecommerce event in the shape Google expects, from whatever your
     # models happen to look like:
@@ -96,19 +100,32 @@ module Consently
     # few obvious names (id/sku, name, price, quantity, category, brand,
     # variant) - a LineItem or a Product usually does.
     #
-    # The previous ecommerce object is cleared first, as Google asks, so two
-    # events on one page cannot bleed into each other.
+    # Under Google Tag Manager the previous ecommerce object is cleared
+    # first, as Google asks, so two events on one page cannot bleed into
+    # each other. Held back without consent, like consently_event.
     def consently_ecommerce(event, items: [], category: :analytics, **params)
-      return "".html_safe unless consently_enabled? && consently_consent.granted?(category)
+      consently_event_tag(Event.new(event, params.merge(items: consently_ecommerce_items(items)), ecommerce: true), category)
+    end
 
-      ecommerce = params.merge(items: Array(items).map { |item| consently_ecommerce_item(item) })
-      payload = { event: event, ecommerce: ecommerce.compact }
+    # The same event from a Turbo Stream response - an add-to-cart that
+    # never renders a page. Items make it an ecommerce event. The stream
+    # carries the event, not a script: the JavaScript side sends it at once
+    # if the category is granted and keeps it until then otherwise, so a
+    # cart filled before the click is counted after it.
+    #
+    #   <%= consently_stream_event("add_to_cart", items: [ @line_item ], currency: "EUR", value: 12.5) %>
+    def consently_stream_event(event, items: nil, category: :analytics, **payload)
+      return "".html_safe unless consently_enabled?
 
-      consently_inline_script <<~JS.strip
-        window.dataLayer = window.dataLayer || [];
-        window.dataLayer.push({ ecommerce: null });
-        window.dataLayer.push(#{payload.to_json});
-      JS
+      payload = payload.merge(items: consently_ecommerce_items(items)) unless items.nil?
+      event = Event.new(event, payload, ecommerce: !items.nil?)
+
+      content_tag("turbo-stream", "",
+        action: "consently_event",
+        event: event.name,
+        category: category,
+        ecommerce: event.ecommerce?,
+        payload: event.payload.to_json)
     end
 
     # A complete cookie policy for the tags this request would load: every
@@ -165,6 +182,40 @@ module Consently
 
     def consently_enabled?
       Consently.enabled?(request)
+    end
+
+    # Two <meta> tags the JavaScript side reads: which categories this page
+    # was rendered with, and how events are to be sent. Provisional head
+    # elements, so Turbo Drive swaps them on every visit.
+    def consently_state_tags
+      granted = Consently.config.categories.select { |category| consently_consent.granted?(category) }
+
+      safe_join([
+        tag.meta(name: "consently-granted", content: granted.join(" ")),
+        tag.meta(name: "consently-transport", content: consently_event_transport)
+      ], "\n")
+    end
+
+    def consently_event_transport
+      @consently_event_transport ||= Consently.event_transport_for(request)
+    end
+
+    # Live when the category is granted; otherwise inert, and released by the
+    # banner together with the tags the moment it is.
+    def consently_event_tag(event, category)
+      return "".html_safe unless consently_enabled?
+
+      javascript = event.to_js(consently_event_transport)
+      return consently_inline_script(javascript) if consently_consent.granted?(category)
+
+      attributes = { type: "text/plain", data: { "consently-category" => category } }
+      attributes[:nonce] = content_security_policy_nonce if content_security_policy_nonce.present?
+
+      content_tag(:script, javascript.html_safe, attributes)
+    end
+
+    def consently_ecommerce_items(items)
+      Array(items).map { |item| consently_ecommerce_item(item) }
     end
 
     # Whether this tag may run now. Normally that means consent; under

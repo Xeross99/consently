@@ -201,8 +201,9 @@ status panel - ask for a reload instead:
 c.reload_after_choice = true
 ```
 
-Either way a `consently:change` event fires on `document`, carrying the
-granted categories, so you can react to it yourself:
+Either way the events waiting on that consent go out too (see below), and a
+`consently:change` event fires on `document`, carrying the granted categories,
+so you can react to it yourself:
 
 ```js
 document.addEventListener("consently:change", ({ detail }) => {
@@ -237,7 +238,7 @@ button carries `aria-expanded` and `aria-controls`, reopening the panel moves
 focus into it, and the animation gives way to `prefers-reduced-motion`. Nobody
 is trapped in a focus cycle they did not ask for.
 
-## Ecommerce events
+## Events
 
 GA4 wants a particular shape, and your models are not it. Hand the helper
 whatever you have:
@@ -249,17 +250,50 @@ whatever you have:
 
 Items may be hashes already in GA4 shape, or any object answering to
 `sku`/`id`, `name`, `price`, `quantity`, `category`, `brand`, `variant` - a
-line item or a product usually does. The previous `ecommerce` object is
-cleared first, as Google asks, so two events on one page cannot bleed into
-each other.
-
-Anything else:
+line item or a product usually does. Anything else:
 
 ```erb
-<%= consently_data_layer_push "newsletter_signup", source: "footer" %>
+<%= consently_event "newsletter_signup", source: "footer" %>
 ```
 
-Both render nothing at all when analytics consent is missing.
+**Sent the way your tags listen.** A page running gtag.js gets
+`gtag('event', ...)` calls; a page running Google Tag Manager gets `dataLayer`
+pushes, the previous `ecommerce` object cleared first as Google asks. The gem
+decides per request from the tags in scope - a container means the dataLayer,
+any other Google tag means gtag - because a push meant for a container is
+something gtag.js silently ignores, and a whole checkout funnel can go missing
+that way. Force it if you must:
+
+```ruby
+c.event_transport = :data_layer   # or :gtag; :auto is the default
+```
+
+**Held back, not dropped.** Without consent an event is rendered the way a tag
+is - an inert `<script type="text/plain">` - and released together with the
+tags the moment its category is granted. The product page a visitor accepts
+on still counts its `view_item`.
+
+**From a Turbo Stream.** An add-to-cart that answers with a stream renders no
+page to put a script on. The stream carries the event instead, and the
+JavaScript side sends it at once if the category is granted, or keeps it until
+it is:
+
+```erb
+<%# line_items/create.turbo_stream.erb %>
+<%= turbo_stream.replace "cart", partial: "cart" %>
+<%= consently_stream_event "add_to_cart", items: [@line_item],
+      currency: "EUR", value: @line_item.price %>
+```
+
+Nothing to register: the action arrives with the banner controller.
+
+**From your own JavaScript.** The same queue, the same rule:
+
+```js
+Consently.track("newsletter_signup", { source: "footer" })
+Consently.track("lead", { value: 1 }, { category: "marketing", ecommerce: false })
+Consently.granted("analytics") // true or false, right now
+```
 
 ## Embedded videos and maps
 
@@ -376,13 +410,14 @@ Helpers:
 
 | | |
 | --- | --- |
-| `consently_tags` | `<head>`: the stylesheet, consent mode defaults, and every tag (blocked or live) |
+| `consently_tags` | `<head>`: the stylesheet, consent mode defaults, every tag (blocked or live), and what the JavaScript side needs to know |
 | `consently_noscript_tags` | after `<body>`: GTM and Meta fallbacks, for granted categories only |
 | `consently_banner` | the banner, the panel, and the JavaScript that releases blocked tags |
 | `consently_policy` | the generated cookie policy: categories, vendors, cookies, durations |
 | `consently_preferences_link` | "Cookie settings" link; anything with `data-consently-open` reopens the panel |
-| `consently_ecommerce(event, items:, **params)` | a GA4 ecommerce event, items mapped from your own objects |
-| `consently_data_layer_push(event, **payload)` | any other dataLayer event, rendered only with analytics consent |
+| `consently_ecommerce(event, items:, **params)` | a GA4 ecommerce event, items mapped from your own objects; held back until consent |
+| `consently_event(event, **payload)` | any other event, gtag or dataLayer as the page's tags expect; held back until consent |
+| `consently_stream_event(event, items:, **payload)` | the same from a Turbo Stream response, sent or queued in the browser |
 | `consently_embed(kind, id, category:, ratio:)` | a video or map that waits for consent |
 | `consently_consent` | the current `Consently::Consent`; `granted?(:analytics)` in your own views |
 
@@ -397,6 +432,7 @@ Configuration:
 | `c.enabled` | `true`, `false`, or a callable taking the request |
 | `c.reload_after_choice` | reload once a choice is made; off by default |
 | `c.google_consent_mode` | `:basic` (default), `:advanced`, or `false` |
+| `c.event_transport` | `:auto` (default: gtag under gtag.js, the dataLayer under a container), `:gtag`, `:data_layer` |
 | `c.log_consents`, `c.consent_subject` | store proof of each decision, optionally naming who |
 | `c.stylesheet` | link the banner's CSS; off if you style it yourself |
 | `c.cookie_name`, `c.cookie_max_age`, `c.cookie_path`, `c.cookie_domain` | where the choice is kept |
@@ -404,8 +440,9 @@ Configuration:
 | `c.respect_do_not_track`, `c.respect_global_privacy_control` | treat an opt-out signal as a rejection |
 | `c.consent_required` | who has to be asked at all; false means no banner and everything granted |
 
-JavaScript: a `consently:change` event fires on `document` with the granted
-categories.
+JavaScript: `Consently.track(event, payload, { category })` sends or queues
+an event, `Consently.granted(category)` says where things stand, and a
+`consently:change` event fires on `document` with the granted categories.
 
 ## Licence
 
