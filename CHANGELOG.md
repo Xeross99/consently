@@ -1,5 +1,24 @@
 # Changelog
 
+## 1.0.0 (2026-09-04)
+
+- Events speak the language of the page's tags: `gtag('event', ...)` under
+  gtag.js, a `dataLayer` push under Google Tag Manager, decided per request
+  from the tags in scope or forced with `event_transport`. Before, every event
+  was a dataLayer push - which gtag.js ignores, so a shop without a container
+  lost its whole ecommerce funnel.
+- An event rendered without consent is held back as an inert script and
+  released with the tags when its category is granted, instead of being
+  dropped. The page a visitor accepts on now counts its `view_item`.
+- `consently_stream_event` sends an event from a Turbo Stream response - the
+  add-to-cart that never renders a page - through a stream action that ships
+  with the banner controller; it is sent at once with consent and queued
+  until then otherwise.
+- `Consently.track(event, payload, { category })` and `Consently.granted()`
+  in JavaScript, on the same queue.
+- `consently_event` is the new name of `consently_data_layer_push`; the old
+  one still works.
+
 ## 0.2.1 (2026-08-13)
 
 - The banner's custom properties moved from `.consently` to `:root`, so the
