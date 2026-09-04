@@ -7,8 +7,8 @@ gemspec
 # is current.
 gem "rails", ENV["RAILS_VERSION"] unless ENV["RAILS_VERSION"].to_s.empty?
 
-# Rails 7.1's test runner calls Minitest with an argument list Minitest 6 no
-# longer accepts, so that combination pins the older one.
+# The test runner in Rails 7.1 and 7.2 calls Minitest with an argument list
+# Minitest 6 no longer accepts, so those rows of the CI matrix pin the older one.
 gem "minitest", ENV["MINITEST_VERSION"] unless ENV["MINITEST_VERSION"].to_s.empty?
 
 gem "puma"
